@@ -1,0 +1,31 @@
+service: connectifi-hooks
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+  openfigi:
+    handler: openfigi.handler
+    events:
+      - httpApi:
+          path: /openfigi
+          method: POST
+
+  polygon:
+    handler: polygon.handler
+    events:
+      - httpApi:
+          path: /polygon
+          method: POST
+
+plugins:
+  - serverless-esbuild
