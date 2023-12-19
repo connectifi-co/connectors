@@ -6,15 +6,15 @@
   "license": "ISC",
   "workspaces": [
     "workspaces/aws",
-    "workspaces/azure"
+    "workspaces/azure",
+    "workspaces/cli"
   ],
   "scripts": {
     "deploy:aws": "npm run deploy --workspace=aws",
-    "test:hook": "ts-node cli/testHook.ts"
+    "test:hook": "npm run test:hook --workspace=cli"
   },
   "dependencies": {
     "@finos/fdc3": "2.0.3",
-    "serverless": "^3.38.0",
-    "ts-node": "^10.9.2"
+    "serverless": "^3.38.0"
   }
 }
