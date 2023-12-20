@@ -38,6 +38,12 @@ const createHookInput = (provider: string, context: any) => {
       });
     case 'azure' :
       return '';
+    case 'http' :
+      return {
+        context,
+        destinations: ["destAppOne", "destAppTwo", "destAppThree"],
+        source : "sourceApp"
+      };
   }
 } 
 
@@ -74,6 +80,18 @@ if (provider && contextType && contextKeys) {
         id: {
           email: contextKeys,
         }
+      };
+      break;
+    case 'fdc3.contactList' :
+      const contacts = contextKeys.split(',');
+      payload = {
+        type: contextType,
+        contacts: contacts.map(email => ({
+          type: 'fdc3.contact',
+          id: {
+            email,
+          }
+        })),
       };
       break;
   }

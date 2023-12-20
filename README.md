@@ -21,7 +21,7 @@ Deployment is standard serverless deployment.  There is more info in the README 
 
 NPM workspaces project.  There are workspaces for all the cloud providers which contain serverless configs as well as some common etc folders.
 
-- `aws` where all the AWS serverless configuration lives
-- `azure` where all the Azure serverless configuration lives
-- `google` where all the Google configuration lives
-- `common` common typescript functions, most of the code lives here
+- `workspaces/aws` where all the AWS serverless configuration lives
+- `workspaces/azure` where all the Azure serverless configuration lives
+- `workspaces/google` where all the Google configuration lives
+- `workspaces/common` common typescript functions, most of the code lives here
