@@ -15,12 +15,7 @@ You'll need to choose your cloud provider and have your credentials all setup in
 
 ### deployment
 
-Deployment is standard serverless deployment.  You can run `npm run deploy` in any of the cloud provider subdirectories.  There are also convenience scripts at the root of the project.
-- AWS deployment: `npm run deploy:aws`.  
-- Azure deployment: `npm run deploy:azure`
-
-More info in the README files in each provider directory.
-
+Deployment is standard serverless deployment.  There is more info in the README files in each provider directory.
 
 ## directories
 
@@ -29,5 +24,4 @@ NPM workspaces project.  There are workspaces for all the cloud providers which 
 - `aws` where all the AWS serverless configuration lives
 - `azure` where all the Azure serverless configuration lives
 - `google` where all the Google configuration lives
-- `cli` a few command line utilities, for example, POSTing to an API function
 - `common` common typescript functions, most of the code lives here

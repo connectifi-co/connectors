@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "deploy": "serverless deploy"
+    "deploy": "serverless deploy --stage "
   },
   "devDependencies": {
     "esbuild": "^0.14.25",

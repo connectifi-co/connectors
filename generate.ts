@@ -25,38 +25,60 @@ const createMockAPIGWProxyEvent = ({
   };
 };
 
-const createHookInput = (type: string, context: any) => {
-  return createMockAPIGWProxyEvent({
-    httpMethod: 'POST',
-    body: JSON.stringify({
-      context,
-      destinations: ["destAppOne", "destAppTwo", "destAppThree"],
-      source : "sourceApp"
-    }),
-  });
+const createHookInput = (provider: string, context: any) => {
+  switch(provider) {
+    case 'aws' :
+      return createMockAPIGWProxyEvent({
+        httpMethod: 'POST',
+        body: JSON.stringify({
+          context,
+          destinations: ["destAppOne", "destAppTwo", "destAppThree"],
+          source : "sourceApp"
+        }),
+      });
+    case 'azure' :
+      return '';
+  }
 } 
 
-if (process.argv[2] && process.argv[3]) {
-  let json: any;
-  switch(process.argv[2]) {
-    case 'instrument' :
-      const inst = {
-        type: "fdc3.instrument",
+const provider = process.argv[2];
+const contextType = process.argv[3];
+const contextKeys = process.argv[4];
+
+if (provider && contextType && contextKeys) {
+  let payload: any;
+  switch(contextType) {
+    case 'fdc3.instrument' :
+      payload = {
+        type: contextType,
         id: {
-          ticker: process.argv[3],
+          ticker: contextKeys,
         }
       };
-      json = createHookInput('fdc3.instrument', inst);
-    case 'contact' :
-      const contact = {
-        type: "fdc3.instrument",
+      break;
+    case 'fdc3.instrumentList' :
+      const tickers = contextKeys.split(',');
+      payload = {
+        type: contextType,
+        instruments: tickers.map(ticker => ({
+          type: 'fdc3.instrument',
+          id: {
+            ticker,
+          }
+        })),
+      };
+      break;
+    case 'fdc3.contact' :
+      payload = {
+        type: contextType,
         id: {
-          ticker: process.argv[3],
+          email: contextKeys,
         }
       };
-      json = createHookInput('fdc3.contact', contact);
+      break;
   }
+  const json = createHookInput(provider, payload);
   console.log(JSON.stringify(json, null, 2));
 } else {
-  console.log('Must provide a context type and key field');
+  console.log('usage: ts-node generate.ts <provider> <context type> <context id keys>');
 }
