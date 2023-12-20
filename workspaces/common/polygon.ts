@@ -1,7 +1,43 @@
 import type { Context as FDC3Context, Instrument } from '@finos/fdc3';
 import { ContextTypes } from '@finos/fdc3';
-import { POLYGON_TICKER_INFO_URL } from './constants';
+import { POLYGON_TICKER_INFO_URL, POLYGON_EXCHANGE_INFO_URL } from './constants';
 import { awsResponse } from './utils';
+
+let exchangeData: [] | undefined = undefined;
+const loadExchangeData = async (apiKey: string) => {
+  const apiURL = `${POLYGON_EXCHANGE_INFO_URL}&apiKey=${apiKey}`;
+
+  console.log(`calling polygon api at: ${apiURL}`);
+
+  const rHeaders = {
+    "Content-Type": "text/plain",
+    outputFormat: "application/json",
+  };
+  const resp = await fetch(apiURL, {
+    headers: rHeaders,
+    method: "GET",
+  });
+  const json: any = await resp.json();
+  if (json.results) {
+    exchangeData = json.results;
+  }
+}
+
+const getExchangeName = async (apiKey: string, mic: string): Promise<any> => {
+  if (!exchangeData) {
+    await loadExchangeData(apiKey);
+  }
+  if (exchangeData) {
+    return exchangeData.find((ex:any) => {
+      return (
+        ex.type === 'exchange' &&
+        ex.mic === ex.operating_mic &&
+        ex.mic === mic
+      );
+    });
+  }
+  return undefined;
+}
 
 const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<Instrument> => {
   const apiURL = `${POLYGON_TICKER_INFO_URL}/${context.id?.ticker}?apiKey=${apiKey}`;
@@ -32,7 +68,11 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
     }
     newContext.market.COUNTRY_ISOALPHA2 = data.locale;
     newContext.market.MIC = data.primary_exchange;
-    newContext.market.name = data.primary_exchange;  // TODO lookup name for code via polygon api
+    const exch = await getExchangeName(apiKey, data.primary_exchange);
+    if (exch) {
+      newContext.market.name = exch.name;
+    }
+    newContext.currency = data.currency_name;
     return newContext;
   }
   return context;
