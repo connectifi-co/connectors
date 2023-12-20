@@ -11,7 +11,13 @@ Connectifi Delivery Hook implementations, written in Typescript, along with Serv
 
 ## getting started
 
-You'll need to choose your cloud provider and have your credentials all setup in order to deploy the API functions.  This repo uses the serverless framework so running `npx serverless config:auth` will work (keep in mind that this would write a ~/.aws/credentials file if using aws)
+The first step is to install the dependencies for this repo:
+
+```bash
+npm install
+```
+
+Once you have the dependencies installed, the next thing to do is select your cloud provider.  You'll need to have your credentials all setup in order to deploy the API functions.  There is more info in the README files in each provider directory.
 
 ### deployment
 

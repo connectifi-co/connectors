@@ -4,6 +4,10 @@ This configuration will create the hook lambdas and API gateway in AWS using the
 
 ## Usage
 
+### Credentials setup
+
+Serverless uses the AWS sdk under the hood so if you're configured already, you may be all set.  In the event you have a custom aws auth setup, you may need to export some ENV vars.  The serverless auth config utils should also work for you.
+
 ### Deployment
 
 Deploying the stack is as simple as running a single command.  you must however have your credentials setup properly for the provider.
