@@ -1,0 +1,8 @@
+{
+  "httpMethod": "POST",
+  "body": "{\"context\":{\"type\":\"fdc3.instrument\",\"id\":{\"ticker\":\"MSFT\"}},\"destinations\":[\"destAppOne\",\"destAppTwo\",\"destAppThree\"],\"source\":\"sourceApp\"}",
+  "headers": {},
+  "queryStringParameters": {},
+  "pathParameters": {},
+  "path": ""
+}

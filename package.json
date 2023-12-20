@@ -11,10 +11,12 @@
   ],
   "scripts": {
     "deploy:aws": "npm run deploy --workspace=aws",
-    "test:hook": "npm run test:hook --workspace=cli"
+    "data:create:instrument": "ts-node generate.ts instrument",
+    "data:create:contact": "ts-node generate.ts contact"
   },
   "dependencies": {
     "@finos/fdc3": "2.0.3",
-    "serverless": "^3.38.0"
+    "serverless": "^3.38.0",
+    "ts-node": "^10.9.2"
   }
 }

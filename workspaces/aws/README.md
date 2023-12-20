@@ -35,6 +35,12 @@ After successful deployment, you can test the hook with the cli utilities in the
 
 ### Local development
 
+You can invoke the lambdas locally by calling each by name:
+
+```bash
+npx serverless invoke local --function polygon -p ../../data/aws/amzn-hook-event.json
+```
+
 It *should* also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, someone would need to do a touch more research but here's what should be possible:
 
 ```bash

@@ -1,3 +1,7 @@
-export const OPENFIGI_TICKER_INFO_URL = 'https://api.openfigi.com/v3/search';
+export const OPENFIGI_HOST = 'https://api.openfigi.com';
 
-export const POLYGON_TICKER_INFO_URL = 'https://api.polygon.io/vX/reference/tickers/';
+export const OPENFIGI_TICKER_INFO_URL = `${OPENFIGI_HOST}/v3/search`;
+
+export const POLYGON_HOST = 'https://api.polygon.io';
+
+export const POLYGON_TICKER_INFO_URL = `${POLYGON_HOST}/vX/reference/tickers`;
