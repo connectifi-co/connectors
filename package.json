@@ -12,7 +12,8 @@
   "scripts": {
     "data:aws": "ts-node generate.ts aws",
     "data:azure": "ts-node generate.ts azure",
-    "data:http": "ts-node generate.ts http"
+    "data:http": "ts-node generate.ts http",
+    "testHook": "ts-node postToHook.ts"
   },
   "dependencies": {
     "@finos/fdc3": "2.0.3",

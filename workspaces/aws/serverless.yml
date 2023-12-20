@@ -1,5 +1,6 @@
 service: connectifi-hooks
 frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws
@@ -29,3 +30,4 @@ functions:
 
 plugins:
   - serverless-esbuild
+  - serverless-dotenv-plugin
