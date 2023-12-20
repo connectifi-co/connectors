@@ -10,9 +10,9 @@
     "workspaces/cli"
   ],
   "scripts": {
-    "deploy:aws": "npm run deploy --workspace=aws",
-    "data:create:instrument": "ts-node generate.ts instrument",
-    "data:create:contact": "ts-node generate.ts contact"
+    "data:aws": "ts-node generate.ts aws",
+    "data:azure": "ts-node generate.ts azure",
+    "data:http": "ts-node generate.ts http"
   },
   "dependencies": {
     "@finos/fdc3": "2.0.3",

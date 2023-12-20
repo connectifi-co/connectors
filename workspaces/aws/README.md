@@ -6,8 +6,10 @@ This configuration will create the hook lambdas and API gateway in AWS using the
 
 ### Deployment
 
+Deploying the stack is as simple as running a single command.  you must however have your credentials setup properly for the provider.
+
 ```
-$ npm run deploy
+$ npm run deploy <stagename>
 ```
 
 After deploying, you should see output similar to:
@@ -31,7 +33,11 @@ _Note_: After deployment, your API is public and can be invoked by anyone. For p
 
 ### Invocation
 
-After successful deployment, you can test the hook with the cli utilities in the root of the project
+After successful deployment, you can test the hook by calling the function by name:
+
+```bash
+npx serverless invoke --function polygon -p ../../data/aws/amzn-hook-event.json
+```
 
 ### Local development
 
@@ -40,6 +46,8 @@ You can invoke the lambdas locally by calling each by name:
 ```bash
 npx serverless invoke local --function polygon -p ../../data/aws/amzn-hook-event.json
 ```
+
+#### DISCLAIMER
 
 It *should* also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, someone would need to do a touch more research but here's what should be possible:
 
