@@ -35,15 +35,7 @@ functions:
 
 _Note_: After deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
 
-### Invocation
-
-After successful deployment, you can test the hook by calling the function by name:
-
-```bash
-npx serverless invoke --function polygon -p ../../data/aws/amzn-hook-event.json
-```
-
-### Local development
+### Running the lambda locally
 
 You can invoke the lambdas locally by calling each by name:
 
@@ -51,20 +43,20 @@ You can invoke the lambdas locally by calling each by name:
 npx serverless invoke local --function polygon -p ../../data/aws/amzn-hook-event.json
 ```
 
-#### DISCLAIMER
+### Running the lambda after deployment
 
-It *should* also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, someone would need to do a touch more research but here's what should be possible:
+After successful deployment, you can test the hook by calling the function by name:
 
 ```bash
-serverless plugin install -n serverless-offline
+npx serverless invoke --function polygon -p ../../data/aws/amzn-hook-event.json
 ```
 
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
+### API Key management
 
-After installation, you can start local emulation with:
+If a hook implementation requires something like an api key or similar configuration, a .env file can be used.  For example, the polygon API requires an API KEY to make calls to it.  This is standard dotenv stuff.  *NOTE* the values will end in the lambda environment which isn't the best way to handle API keys in a production scenario.  Secrets manager or the parameter store are better choices but that is beyond the scope of this repo.
 
+```bash
+cp .env.sample .env
+
+# edit the .env file to contain the real apy key value
 ```
-serverless offline
-```
-
-To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).

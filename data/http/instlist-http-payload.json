@@ -1,0 +1,31 @@
+{
+  "context": {
+    "type": "fdc3.instrumentList",
+    "instruments": [
+      {
+        "type": "fdc3.instrument",
+        "id": {
+          "ticker": "AMZN"
+        }
+      },
+      {
+        "type": "fdc3.instrument",
+        "id": {
+          "ticker": "MSFT"
+        }
+      },
+      {
+        "type": "fdc3.instrument",
+        "id": {
+          "ticker": "AAPL"
+        }
+      }
+    ]
+  },
+  "destinations": [
+    "destAppOne",
+    "destAppTwo",
+    "destAppThree"
+  ],
+  "source": "sourceApp"
+}
