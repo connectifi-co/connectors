@@ -18,6 +18,7 @@ const loadExchangeData = async (apiKey: string) => {
     method: "GET",
   });
   const json: any = await resp.json();
+  console.log(`exchange results ${JSON.stringify(json)}`);
   if (json.results) {
     exchangeData = json.results;
   }
@@ -69,6 +70,7 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
     newContext.market.COUNTRY_ISOALPHA2 = data.locale;
     newContext.market.MIC = data.primary_exchange;
     const exch = await getExchangeName(apiKey, data.primary_exchange);
+    console.log(`got exchange ${JSON.stringify(exch)}`);
     if (exch) {
       newContext.market.name = exch.name;
     }
