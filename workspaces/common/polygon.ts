@@ -2,8 +2,9 @@ import type { Context as FDC3Context, Instrument } from '@finos/fdc3';
 import { ContextTypes } from '@finos/fdc3';
 import { POLYGON_TICKER_INFO_URL, POLYGON_EXCHANGE_INFO_URL } from './constants';
 import { awsResponse } from './utils';
+import { exchanges } from './exchangeData';
 
-let exchangeData: [] | undefined = undefined;
+let exchangeData: Array<any>  = exchanges;
 const loadExchangeData = async (apiKey: string) => {
   const apiURL = `${POLYGON_EXCHANGE_INFO_URL}&apiKey=${apiKey}`;
 
@@ -58,7 +59,7 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
 
   console.log('polygon results', data);
 
-  if (data) {
+  if (data) { 
     const newContext:Instrument = {...context};
     if (!newContext.name) {
       newContext.name = data.name;
@@ -73,6 +74,7 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
     console.log(`got exchange ${JSON.stringify(exch)}`);
     if (exch) {
       newContext.market.name = exch.name;
+      newContext.market.acronym = exch.acronym;
     }
     newContext.currency = data.currency_name;
     return newContext;
@@ -87,8 +89,8 @@ export const polygonHook = async (apiKey: string, context:FDC3Context, destinati
       destination,
       context: newCtx,
     }));
-
-    return awsResponse(200, {changes});
+    console.log(`polygon result ${JSON.stringify(changes)}`);
+    return awsResponse(200, changes);
   }
 
   return awsResponse(400, {

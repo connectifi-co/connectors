@@ -27,5 +27,12 @@ functions:
           path: /polygon
           method: POST
 
+  exate:
+    handler: exate.handler
+    events:
+      - httpApi:
+          path: /exate
+          method: POST
+          
 plugins:
   - serverless-esbuild
