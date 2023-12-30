@@ -27,5 +27,12 @@ functions:
           path: /polygon
           method: POST
 
+  slackPostToChannel:
+    handler: slackPostToChannel.handler
+    events:
+      - httpApi:
+          path: /slackPostToChannel
+          method: POST
+
 plugins:
   - serverless-esbuild
