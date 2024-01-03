@@ -21,5 +21,5 @@ const dataFile = process.argv[3];
 if (hookUrl && dataFile) {
   getIt(hookUrl, dataFile)
 } else {
-  console.log('usage: ts-node generate.ts <provider> <context type> <context id keys>');
+  console.log('usage: ts-node postToHook.ts <hook url> <path to data file>');
 }
