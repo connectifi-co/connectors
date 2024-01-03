@@ -1,13 +1,28 @@
-import type { Context as FDC3Context, Instrument } from '@finos/fdc3';
+import type { Context as FDC3Context, Instrument, InstrumentList } from '@finos/fdc3';
 import { ContextTypes } from '@finos/fdc3';
 import { POLYGON_TICKER_INFO_URL, POLYGON_EXCHANGE_INFO_URL } from './constants';
 import { awsResponse } from './utils';
+
+const exchangeAcronyms = [
+  {
+    mic: 'XNYS',
+    acronym: 'NYSE',
+  },
+  {
+    mic: 'XNAS',
+    acronym: 'NASDAQ',
+  },
+];
+const getExchangeAcronym = (mic: string): string | undefined => {
+  const ex = exchangeAcronyms.find((ex:any) => ex.mic === mic);
+  return ex && ex.acronym;
+}
 
 let exchangeData: [] | undefined = undefined;
 const loadExchangeData = async (apiKey: string) => {
   const apiURL = `${POLYGON_EXCHANGE_INFO_URL}&apiKey=${apiKey}`;
 
-  console.log(`calling polygon api at: ${apiURL}`);
+  console.log(`calling polygon exchange info api: ${apiURL}`);
 
   const rHeaders = {
     "Content-Type": "text/plain",
@@ -39,10 +54,15 @@ const getExchangeName = async (apiKey: string, mic: string): Promise<any> => {
   return undefined;
 }
 
-const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<Instrument> => {
-  const apiURL = `${POLYGON_TICKER_INFO_URL}/${context.id?.ticker}?apiKey=${apiKey}`;
+const tickerCache: Map<string, any> = new Map<string, any>();
+export const getTickerInfo = async (apiKey: string, ticker:string): Promise<any> => {
+  if (tickerCache.has(ticker)) {
+    console.log(`ticker: ${ticker} is in cache`);
+    return tickerCache.get(ticker);
+  }
 
-  console.log(`calling polygon api at: ${apiURL}`);
+  const apiURL = `${POLYGON_TICKER_INFO_URL}/${ticker}?apiKey=${apiKey}`;
+  console.log(`ticker not cached, calling polygon api: ${apiURL}`);
 
   const rHeaders = {
     "Content-Type": "text/plain",
@@ -54,25 +74,36 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
   });
   const json: any = await resp.json();
   const data = json.results;
-
-  console.log('polygon results', data);
-
+  // console.log(`ticker response: ${JSON.stringify(data, null, 2)}`);
   if (data) {
+    tickerCache.set(ticker, data);
+    return data;
+  }
+  return undefined;
+}
+
+const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<Instrument> => {
+  const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker || '')
+  if (tickerInfo) {
     const newContext:Instrument = {...context};
     if (!newContext.name) {
-      newContext.name = data.name;
+      newContext.name = tickerInfo.name;
     }
-    newContext.id.FIGI = data.composite_figi;
+    newContext.id.FIGI = tickerInfo.composite_figi;
     if (!newContext.market) {
       newContext.market = {};
     }
-    newContext.market.COUNTRY_ISOALPHA2 = data.locale;
-    newContext.market.MIC = data.primary_exchange;
-    const exch = await getExchangeName(apiKey, data.primary_exchange);
+    newContext.market.COUNTRY_ISOALPHA2 = tickerInfo.locale;
+    newContext.market.MIC = tickerInfo.primary_exchange;
+    const exch = await getExchangeName(apiKey, tickerInfo.primary_exchange);
     if (exch) {
       newContext.market.name = exch.name;
     }
-    newContext.currency = data.currency_name;
+    const acronym = getExchangeAcronym(tickerInfo.primary_exchange);
+    if (acronym) {
+      newContext.market.acronym = acronym;
+    }
+    newContext.currency = tickerInfo.currency_name;
     return newContext;
   }
   return context;
@@ -86,6 +117,20 @@ export const polygonHook = async (apiKey: string, context:FDC3Context, destinati
       context: newCtx,
     }));
 
+    return awsResponse(200, {changes});
+  } else if (context.type === ContextTypes.InstrumentList) {
+    const instruments = (context as InstrumentList).instruments;
+    const newInstruments = await Promise.all(instruments.map((inst) => {
+      return enahanceInstrument(apiKey, inst);
+    }))
+    const newCtx = {
+      type: ContextTypes.InstrumentList,
+      instruments: newInstruments,
+    }
+    const changes = destinations.map(destination => ({
+      destination,
+      context: newCtx,
+    }));
     return awsResponse(200, {changes});
   }
 

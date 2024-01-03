@@ -1,0 +1,14 @@
+{
+  "context": {
+    "type": "fdc3.instrument",
+    "id": {
+      "ticker": "AMZN"
+    }
+},
+  "destinations": [
+    "destAppOne",
+    "destAppTwo",
+    "destAppThree"
+  ],
+  "source": "sourceApp"
+}

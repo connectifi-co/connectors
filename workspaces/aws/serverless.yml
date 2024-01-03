@@ -27,5 +27,13 @@ functions:
           path: /polygon
           method: POST
 
+  slack:
+    handler: slack.handler
+    events:
+      - httpApi:
+          path: /slack
+          method: POST
+
 plugins:
   - serverless-esbuild
+  - serverless-dotenv-plugin
