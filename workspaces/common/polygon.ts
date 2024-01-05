@@ -104,6 +104,12 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
       newContext.market.acronym = acronym;
     }
     newContext.currency = tickerInfo.currency_name;
+    //add address
+    newContext.address = tickerInfo.address;
+    //add website
+    //strip off http/https to make consumable as a smart link
+    newContext.homepage_url = tickerInfo.homepage_url.startsWith("http://") ? tickerInfo.homepage_url.substr('http://'.length) : tickerInfo.homepage_url.substr('https://'.length);
+
     return newContext;
   }
   return context;
