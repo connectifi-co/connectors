@@ -33,6 +33,20 @@ functions:
       - httpApi:
           path: /slack
           method: POST
+    
+  exate:
+    handler: exate.handler
+    events:
+      - httpApi:
+          path: /exate
+          method: POST
+
+  companyHQ:
+    handler: companyHQ.handler
+    events:
+      - httpApi:
+          path: /companyHQ
+          method: POST
 
 plugins:
   - serverless-esbuild

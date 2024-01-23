@@ -83,12 +83,11 @@ export const getTickerInfo = async (apiKey: string, ticker:string): Promise<any>
 }
 
 const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<Instrument> => {
-  const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker || '')
+  const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker?.toUpperCase() || '')
   if (tickerInfo) {
     const newContext:Instrument = {...context};
-    if (!newContext.name) {
-      newContext.name = tickerInfo.name;
-    }
+    newContext.name = tickerInfo.name;
+   
     newContext.id.FIGI = tickerInfo.composite_figi;
     if (!newContext.market) {
       newContext.market = {};
