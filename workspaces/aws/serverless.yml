@@ -4,6 +4,9 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  stackTags:
+    classification: dev
+    description: testing hooks
 
 functions:
   index:
