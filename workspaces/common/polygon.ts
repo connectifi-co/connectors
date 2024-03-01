@@ -56,9 +56,10 @@ const getExchangeName = async (apiKey: string, mic: string): Promise<any> => {
 
 const tickerCache: Map<string, any> = new Map<string, any>();
 export const getTickerInfo = async (apiKey: string, ticker:string): Promise<any> => {
-  if (tickerCache.has(ticker)) {
+  const tickerKey = ticker.toUpperCase();
+  if (tickerCache.has(tickerKey)) {
     console.log(`ticker: ${ticker} is in cache`);
-    return tickerCache.get(ticker);
+    return tickerCache.get(tickerKey);
   }
 
   const apiURL = `${POLYGON_TICKER_INFO_URL}/${ticker}?apiKey=${apiKey}`;
@@ -76,7 +77,7 @@ export const getTickerInfo = async (apiKey: string, ticker:string): Promise<any>
   const data = json.results;
   // console.log(`ticker response: ${JSON.stringify(data, null, 2)}`);
   if (data) {
-    tickerCache.set(ticker, data);
+    tickerCache.set(tickerKey, data);
     return data;
   }
   return undefined;
@@ -87,7 +88,6 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
   if (tickerInfo) {
     const newContext:Instrument = {...context};
     newContext.name = tickerInfo.name;
-   
     newContext.id.FIGI = tickerInfo.composite_figi;
     if (!newContext.market) {
       newContext.market = {};
@@ -103,12 +103,8 @@ const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<I
       newContext.market.acronym = acronym;
     }
     newContext.currency = tickerInfo.currency_name;
-    //add address
     newContext.address = tickerInfo.address;
-    //add website
-    //strip off http/https to make consumable as a smart link
-    newContext.homepage_url = tickerInfo.homepage_url.startsWith("http://") ? tickerInfo.homepage_url.substr('http://'.length) : tickerInfo.homepage_url.substr('https://'.length);
-
+    newContext.homepage_url = tickerInfo.homepage_url;
     return newContext;
   }
   return context;
