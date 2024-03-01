@@ -70,10 +70,11 @@ export const companyHQ = async (apiKey: string, context:FDC3Context) => {
     let url = '';
     console.log(`get address from ${JSON.stringify(newCtx)}`);
     if (newCtx.address){
-        url = `https://www.google.com/maps/place/${encodeURIComponent(newCtx.address.address1)},+${encodeURIComponent(newCtx.address.city)},+${encodeURIComponent(newCtx.address.state)}+${cleanPostalCode(newCtx.address.postal_code)}`
+        url = `https://www.google.com/maps/search/${encodeURIComponent(newCtx.address.address1)},+${encodeURIComponent(newCtx.address.city)},+${encodeURIComponent(newCtx.address.state)}+${cleanPostalCode(newCtx.address.postal_code)}`
     } else {
         url = 'https://maps.google.com';
     }
+    console.log(`url result: ${url}`);
 
     return awsResponse(200, {url});
   } 
