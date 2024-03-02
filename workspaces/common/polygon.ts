@@ -83,8 +83,8 @@ export const getTickerInfo = async (apiKey: string, ticker:string): Promise<any>
   return undefined;
 }
 
-const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<Instrument> => {
-  const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker || '')
+export const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<Instrument> => {
+  const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker?.toUpperCase() || '')
   if (tickerInfo) {
     const newContext:Instrument = {...context};
     newContext.name = tickerInfo.name;
