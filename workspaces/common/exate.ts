@@ -4,7 +4,12 @@ import { EXATE_ID_URL, EXATE_DATA_URL } from './constants';
 import { awsResponse } from './utils';
 
 
-const filterContext = async (apiKey: string, clientId: string, clientSecret: string, context : Context) : Promise<Context> => {
+interface HookItem {
+  destination: string;
+  context: Context;
+};
+
+const filterContext = async (apiKey: string, clientId: string, clientSecret: string, destinationId: string, context : Context) : Promise<Context> => {
 
     //get the bearer token
     const idUrl = EXATE_ID_URL;
@@ -49,31 +54,31 @@ const filterContext = async (apiKey: string, clientId: string, clientSecret: str
         'X-Resource-Token': token
       };
     
-    const dataBody = {
-        "countryCode": "US",
-        "dataOwningCountryCode": "US",
+      const dataBody = {
+        "countryCode": "GB",
+        "dataOwningCountryCode": "GB",
         "manifestName": context.type,
         "jobType": "Restrict",
         "dataSet": JSON.stringify(context),
         "protectNullValues": true,
         "preserveStringLength": false,
-        "snapshotDate": "2021-11-18T00:00:00Z",
+        "snapshotDate": "2021-11-18T00:00:00Z", //don't need
+        "dataUsageId": 321, //'Legitimate Use' code
         "restrictedText": "*********",
         "matchingRule": {
             "claims": [
                 {
-                    "attributeName": "ADGroup",
-                    "attributeValue": "CRM"
+                  "attributeName": "Orchestrator",
+                  "attributeValue": "ExateDemo"
                 },
                 {
-                    "attributeName": "Orchestrator",
-                    "attributeValue": "Connectifi"
+                    "attributeName": "destinationId",
+                    "attributeValue": destinationId
                 }
             ]
         }
     };
-
-        
+    console.log('exate data request', JSON.stringify(dataBody));
     const dataRes = await fetch(dataURL, { method: 'POST', headers: dataHeaders, body: JSON.stringify(dataBody)});
     if (!dataRes.ok) {
         const errText = await dataRes.text();
@@ -87,16 +92,19 @@ const filterContext = async (apiKey: string, clientId: string, clientSecret: str
 };
 
 export const exateHook = async (apiKey: string, clientId: string, clientSecret: string, context: Context, destinations: string[]) => {
-    const filteredTypes = [ContextTypes.Contact as string, ContextTypes.ContactList as string, ContextTypes.Portfolio as string, ContextTypes.Position as string];
-    if (filteredTypes.indexOf(context.type) > -1) {
-      const newCtx = await filterContext(apiKey, clientId, clientSecret, context);
-      const changes = destinations.map(destination => ({
-        destination,
-        context: newCtx,
-      }));
+      const changes: Array<HookItem> = [];
+
+      for (let i = 0; i < destinations.length; i++) {
+        const destinationId = destinations[i];
+        const newCtx = await filterContext(apiKey, clientId, clientSecret, destinationId, context);
+        changes.push({
+            destination: destinationId,
+            context: newCtx
+          } as HookItem);
+      }
   
       return awsResponse(200, {changes});
-    }
+    
   
     return awsResponse(400, {
       message: 'bad context type',
