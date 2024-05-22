@@ -31,6 +31,13 @@ functions:
           path: /polygon
           method: POST
 
+  polygonData:
+    handler: polygonData.handler
+    events:
+      - httpApi:
+          path: /polygonData
+          method: POST
+
   slack:
     handler: slack.handler
     events:
