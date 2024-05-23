@@ -7,7 +7,7 @@ provider:
   stackTags:
     classification: dev
     description: testing hooks
-    Tag1: "dev"
+    environment: "dev"
 
 functions:
   index:
