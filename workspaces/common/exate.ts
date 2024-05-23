@@ -1,5 +1,4 @@
 import type { Context } from '@finos/fdc3';
-import { ContextTypes } from '@finos/fdc3';
 import { EXATE_ID_URL, EXATE_DATA_URL } from './constants';
 import { awsResponse } from './utils';
 
@@ -55,8 +54,8 @@ const filterContext = async (apiKey: string, clientId: string, clientSecret: str
       };
     
       const dataBody = {
-        "countryCode": "GB",
-        "dataOwningCountryCode": "GB",
+        "countryCode": "US",
+        "dataOwningCountryCode": "US",
         "manifestName": context.type,
         "jobType": "Restrict",
         "dataSet": JSON.stringify(context),
@@ -93,9 +92,7 @@ const filterContext = async (apiKey: string, clientId: string, clientSecret: str
 
 export const exateHook = async (apiKey: string, clientId: string, clientSecret: string, context: Context, destinations: string[]) => {
       const changes: Array<HookItem> = [];
-
-      for (let i = 0; i < destinations.length; i++) {
-        const destinationId = destinations[i];
+      for (let destinationId  of destinations) {
         const newCtx = await filterContext(apiKey, clientId, clientSecret, destinationId, context);
         changes.push({
             destination: destinationId,
@@ -104,9 +101,4 @@ export const exateHook = async (apiKey: string, clientId: string, clientSecret: 
       }
   
       return awsResponse(200, {changes});
-    
-  
-    return awsResponse(400, {
-      message: 'bad context type',
-    });
   };
