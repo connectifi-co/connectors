@@ -51,6 +51,20 @@ functions:
       - httpApi:
           path: /companyHQ
           method: POST
+  
+  linkMessage:
+    handler: linkMessage.handler
+    events:
+      - httpApi:
+          path: /linkMessage
+          method: POST
+  
+  emailLink:
+    handler: emailLink.handler
+    events:
+      - httpApi:
+          path: /emailLink
+          method: POST
 
 plugins:
   - serverless-esbuild

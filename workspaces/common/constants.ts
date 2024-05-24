@@ -15,3 +15,5 @@ export const EXATE_HOST = "https://api.exate.co";
 export const EXATE_ID_URL = `${EXATE_HOST}/apigator/identity/v1/token`;
 
 export const EXATE_DATA_URL = `${EXATE_HOST}/apigator/protect/v1/dataset`;
+
+export const OPENAI_COMPLETIONS_URL = `https://api.openai.com/v1/chat/completions`;
