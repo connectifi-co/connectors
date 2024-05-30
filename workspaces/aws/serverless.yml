@@ -65,7 +65,14 @@ functions:
       - httpApi:
           path: /emailLink
           method: POST
-
+  
+  teamsLink:
+    handler: teamsLink.handler
+    events:
+      - httpApi:
+          path: /teamsLink
+          method: POST
+          
 plugins:
   - serverless-esbuild
   - serverless-dotenv-plugin

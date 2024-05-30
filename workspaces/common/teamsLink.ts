@@ -5,6 +5,9 @@ import { awsResponse } from './utils';
 import type { Context as FDC3Context, Instrument, InstrumentList } from '@finos/fdc3';
 import { POLYGON_TICKER_INFO_URL, POLYGON_EXCHANGE_INFO_URL } from './constants';
 
+
+
+
 const tickerCache: Map<string, any> = new Map<string, any>();
 export const getTickerInfo = async (apiKey: string, ticker:string): Promise<any> => {
   const tickerKey = ticker.toUpperCase();
@@ -63,17 +66,16 @@ export const addMessageToContext = async (apiKey: string, polygonKey: string, co
     linkContext = await enhanceInstrument(polygonKey, linkContext as Instrument);
   }
   const linkHTML = context.url.replace("&","%26").replace(" ","+");
-  const newContext:LinkContext = {...context};
+  const newContext:LinkContext = {...context, url:linkHTML};
   const req = {
     model: "gpt-3.5-turbo",
     messages: [
         {
             role: "user",
-            content: `Write a headline plus a brief - 3 sentences long - message for sharing a topic and a URL. 
+            content: `Write a brief - no longer than 200 characters - message for sharing a topic and a URL. 
             The topic is an FDC3 context data object of: ${JSON.stringify(linkContext)}. 
             Do not include a link or URL in the body. 
-              The title of the page the link is to is: The Connectifi Financial Portal. 
-             Return the headline and message in a valid JSON data structure with properties of 'subject' and 'body' for example: {"subject":"...", "body":"..."}`
+            `
         }
     ]
   }
@@ -90,12 +92,10 @@ export const addMessageToContext = async (apiKey: string, polygonKey: string, co
     if (res.ok) {
       
       const resJson:any = await res.json();
-      const data = resJson.choices && resJson.choices.length && resJson.choices[0];
-      console.log('openai response', {resJson, data})
-      if (data) {
-        const result = JSON.parse(data.message.content);
-        newContext.subject = result.subject.replace("&","%26");
-        newContext.body = `${result.body.replace("&","%26")} - <${linkHTML}>`;
+      const result = resJson.choices && resJson.choices.length && resJson.choices[0];
+      console.log('openai response', {resJson, result});
+      if (result) {
+        newContext.body = `${result.message.content.replace("&","%26")}`;
       }
       return newContext;
     } else {
@@ -109,10 +109,10 @@ export const addMessageToContext = async (apiKey: string, polygonKey: string, co
   return context;
 }
 
-export const emailLink = async (apiKey: string, polygonKey: string, context:Context) => {
+export const teamsLink = async (apiKey: string, polygonKey: string, context:Context) => {
   if (context.type === "cfi.link") {
     const newCtx = await addMessageToContext(apiKey, polygonKey, context as LinkContext);
-    const url = `mailto:?subject=${newCtx.subject}&body=${newCtx.body}`;
+    const url = `https://teams.microsoft.com/share?href=${newCtx.url}&msgText=${newCtx.body}`;
 
     console.log(`url result: ${url}`);
 
