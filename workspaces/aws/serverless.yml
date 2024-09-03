@@ -52,6 +52,13 @@ functions:
           path: /companyHQ
           method: POST
 
+  hubspot:
+    handler: hubspot.handler
+    events:
+      - httpApi:
+          path: /hubspot
+          method: POST
+
 plugins:
   - serverless-esbuild
   - serverless-dotenv-plugin
