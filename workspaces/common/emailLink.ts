@@ -54,14 +54,14 @@ interface LinkContext {
     recipients?: ContactList
 }
 
-export const addMessageToContext = async (apiKey: string, polygonKey: string, context: LinkContext):Promise<LinkContext> => {
-    if (context.subject && context.body) {
+export const addMessageToContext = async (apiKey: string, polygonKey: string, context: LinkContext, source: string):Promise<LinkContext> => {
+   /* if (context.subject && context.body) {
         return context;
-    }
-  let linkContext : any = context.context || {type:"empty"};
+    }*/ 
+ /* let linkContext : any = context.context || {type:"empty"};
   if (linkContext.type === ContextTypes.Instrument){
     linkContext = await enhanceInstrument(polygonKey, linkContext as Instrument);
-  }
+  }*/
   const linkHTML = context.url.replace("&","%26").replace(" ","+");
   const newContext:LinkContext = {...context};
   const req = {
@@ -70,9 +70,9 @@ export const addMessageToContext = async (apiKey: string, polygonKey: string, co
         {
             role: "user",
             content: `Write a headline plus a brief - 3 sentences long - message for sharing a topic and a URL. 
-            The topic is an FDC3 context data object of: ${JSON.stringify(linkContext)}. 
+            The topic is an app with the title of '${ context.subject }' featuring a company identified by the following FDC3 context data object:  ${JSON.stringify(context.context)} from an application called '${source}'. 
             Do not include a link or URL in the body. 
-              The title of the page the link is to is: The Connectifi Financial Portal. 
+            Additionally use the following text: '${context.body}'
              Return the headline and message in a valid JSON data structure with properties of 'subject' and 'body' for example: {"subject":"...", "body":"..."}`
         }
     ]
@@ -102,6 +102,7 @@ export const addMessageToContext = async (apiKey: string, polygonKey: string, co
       const errText = res.text();
       console.error('error response from openAI', {status: res.status, statusText: res.statusText, msg: errText});
       newContext.body = linkHTML;
+      return newContext;
     }
   } catch(e) {
     console.error('error calling openAI api', {err: e});
@@ -111,10 +112,12 @@ export const addMessageToContext = async (apiKey: string, polygonKey: string, co
 
 export const emailLink = async (apiKey: string, polygonKey: string, context:Context) => {
   if (context.type === "cfi.link") {
-    const newCtx = await addMessageToContext(apiKey, polygonKey, context as LinkContext);
-    const url = `mailto:?subject=${newCtx.subject}&body=${newCtx.body}`;
 
-    console.log(`url result: ${url}`);
+  // const newCtx = await addMessageToContext(apiKey, polygonKey, context as LinkContext, source);
+    const linkHTML = context.url.replace("&","%26").replace(" ","+");
+    const subject = `${context.appId} for ${context.subject.replace("&","%26")} on Connectifi!`;
+    const body = `${context.text.replace("&","%26")} - <${linkHTML}>`;
+    const url = `mailto:?subject=${subject}&body=${body}`;
 
     return awsResponse(200, {url});
   } 

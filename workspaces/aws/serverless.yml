@@ -4,6 +4,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  timeout: 10
   stackTags:
     classification: dev
     description: testing hooks
@@ -71,6 +72,13 @@ functions:
     events:
       - httpApi:
           path: /teamsLink
+          method: POST
+
+  openAI:
+    handler: openAI.handler
+    events:
+      - httpApi:
+          path: /openAI
           method: POST
           
 plugins:

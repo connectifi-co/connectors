@@ -5,3 +5,10 @@ export interface DeliveryHookRequest {
   source: string;
   destinations: string[];
 }
+
+export interface IntentHookRequest {
+  context: FDC3Context;
+  intent: string;
+  source: string;
+  destination: string;
+}

@@ -8,7 +8,7 @@ export async function handler(event:any) {
 
   const polygonKey = process.env.POLYGON_API_KEY || '';
 
-  const { context, destinations } = JSON.parse(event.body) as DeliveryHookRequest;
+  const { context, source } = JSON.parse(event.body) as DeliveryHookRequest;
 
   return emailLink(apiKey, polygonKey, context);
 }
