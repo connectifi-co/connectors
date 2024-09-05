@@ -62,7 +62,6 @@ const getPriceHistory = async (apiKey: string, ticker:string): Promise<any> => {
     
     const range = getRolling(365);
     const apiURL = `${POLYGON_PRICE_HISTORY_URL}/${ticker}/range/1/day/${range[0]}/${range[1]}?adjusted=true&sort=asc&apiKey=${apiKey}`;
-    console.log(`ticker pricing not cached, calling polygon api: ${apiURL}`);
   
     const rHeaders = {
       "Content-Type": "text/plain",
