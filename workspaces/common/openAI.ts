@@ -1,7 +1,6 @@
 import type { Context } from '@finos/fdc3';
-import { OPENAI_COMPLETIONS_URL } from './constants';
+import { OPENAI_COMPLETIONS_URL, POLYGON_TICKER_INFO_URL, POLYGON_PRICE_HISTORY_URL } from './constants';
 import { awsResponse } from './utils';
-import { POLYGON_TICKER_INFO_URL, POLYGON_PRICE_HISTORY_URL } from './constants';
 
 const tickerCache: Map<string, any> = new Map<string, any>();
 const priceCache: Map<string, any> = new Map<string, any>();
@@ -27,7 +26,7 @@ const getTickerInfo = async (apiKey: string, ticker:string): Promise<any> => {
   const json: any = await resp.json();
   const data = json.results;
    console.log(`ticker response: ${JSON.stringify(data, null, 2)}`);
-  if (data && data.name) {
+  if (data?.name) {
     tickerCache.set(tickerKey, data);
     return data;
   }
@@ -76,9 +75,8 @@ const getPriceHistory = async (apiKey: string, ticker:string): Promise<any> => {
     const json: any = await resp.json();
     const data = json.results;
 
-    console.log(`ticker response: ${JSON.stringify(data, null, 2)}`);
     if (data) {
-      tickerCache.set(tickerKey, data);
+      priceCache.set(tickerKey, data);
       return data;
     }
     return undefined;
@@ -242,7 +240,7 @@ const getCompanySummary = async (apiKey: string, polygonKey: string, context: Co
     if (res.ok) {
       
       const resJson:any = await res.json();
-      const result = resJson.choices && resJson.choices.length && resJson.choices[0].message.content;
+      const result = resJson?.choices.length && resJson.choices[0].message.content;
       return {
         type:'cfi.completion',
         result
