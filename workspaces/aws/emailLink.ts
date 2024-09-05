@@ -1,14 +1,8 @@
 import type { DeliveryHookRequest } from "../common/types"
 import { emailLink } from "../common/emailLink";
 
-
 export async function handler(event:any) {
+  const { context } = JSON.parse(event.body) as DeliveryHookRequest;
 
-  const apiKey = process.env.OPEN_AI_API_KEY || '';
-
-  const polygonKey = process.env.POLYGON_API_KEY || '';
-
-  const { context, source } = JSON.parse(event.body) as DeliveryHookRequest;
-
-  return emailLink(apiKey, polygonKey, context);
+  return emailLink( context);
 }

@@ -1,4 +1,4 @@
-import type { Context, ContactList, Instrument } from '@finos/fdc3';
+import type { Context } from '@finos/fdc3';
 import { OPENAI_COMPLETIONS_URL } from './constants';
 import { awsResponse } from './utils';
 import { POLYGON_TICKER_INFO_URL, POLYGON_PRICE_HISTORY_URL } from './constants';
@@ -83,59 +83,6 @@ const getPriceHistory = async (apiKey: string, ticker:string): Promise<any> => {
     }
     return undefined;
   }
-
-const instrumentListSchema = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://fdc3.finos.org/schemas/2.1/context/instrumentList.schema.json",
-    "type": "object",
-    "title": "InstrumentList",
-    "description": "A collection of instruments. Use this type for use cases that require not just a single instrument, but multiple (e.g. to populate a watchlist). However, when holding information for each instrument is required, it is recommended to use the [Portfolio](Portfolio) type.\n\nThe instrument list schema does not explicitly include identifiers in the `id` section, as there is not a common standard for such identifiers. Applications can, however, populate this part of the contract with custom identifiers if so desired.",
-    "allOf": [
-      {
-        "type": "object",
-        "properties": {
-          "type": {
-            "const": "fdc3.instrumentList"
-          },
-          "instruments": {
-            "type": "array",
-            "title": "List of instruments",
-            "description": "An array of instrument contexts that forms the list.",
-            "items": {
-              "$ref": "instrument.schema.json#"
-            }
-          }
-        },
-        "required": [
-          "instruments"
-        ]
-      },
-      { "$ref": "context.schema.json#/definitions/BaseContext" }
-    ],
-    "examples": [
-      {
-        "type": "fdc3.instrumentList",
-        "instruments": [
-          {
-            "type": "fdc3.instrument",
-            "id": {
-              "ticker": "AAPL"
-            },
-            "market": {
-              "MIC": "XNAS"
-            }
-          },
-          {
-            "type": "fdc3.instrument",
-            "id": {
-              "ISIN": "US5949181045"
-            }
-          }
-        ]
-      }
-    ]
-  };
-
 
   const instrumentListEx = {
       "type": "fdc3.instrumentList",
@@ -233,9 +180,7 @@ const getSimilar = async (apiKey: string, polygonKey: string, context: Context):
             if (res.ok) {
               
               const resJson:any = await res.json();
-              console.log('openai respont', JSON.stringify(resJson));
               const result = resJson.choices[0].message.content;
-              console.log('openai result', result);
               return JSON.parse(result) as Context;
             } else {
               const errText = res.text();
@@ -250,8 +195,6 @@ const getSimilar = async (apiKey: string, polygonKey: string, context: Context):
           }
           return context;
 }
-
-
 
 const getCompanySummary = async (apiKey: string, polygonKey: string, context: Context):Promise<Context> => {
    
@@ -295,13 +238,11 @@ const getCompanySummary = async (apiKey: string, polygonKey: string, context: Co
     "Connection": "keep-alive"
   };
   try {
-    console.log('openai request', OPENAI_COMPLETIONS_URL, apiKey, JSON.stringify(req))
     const res = await fetch(OPENAI_COMPLETIONS_URL, { method: 'POST', body: JSON.stringify(req), headers});
     if (res.ok) {
       
       const resJson:any = await res.json();
       const result = resJson.choices && resJson.choices.length && resJson.choices[0].message.content;
-      console.log('openai response', {resJson, result});
       return {
         type:'cfi.completion',
         result
