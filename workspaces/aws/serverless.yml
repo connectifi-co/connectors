@@ -4,6 +4,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  timeout: 10
   stackTags:
     classification: dev
     description: testing hooks
@@ -51,7 +52,21 @@ functions:
       - httpApi:
           path: /companyHQ
           method: POST
+  
+  emailLink:
+    handler: emailLink.handler
+    events:
+      - httpApi:
+          path: /emailLink
+          method: POST
 
+  openAI:
+    handler: openAI.handler
+    events:
+      - httpApi:
+          path: /openAI
+          method: POST
+          
 plugins:
   - serverless-esbuild
   - serverless-dotenv-plugin

@@ -94,6 +94,7 @@ export const enahanceInstrument = async (apiKey: string, context:Instrument): Pr
     }
     newContext.market.COUNTRY_ISOALPHA2 = tickerInfo.locale;
     newContext.market.MIC = tickerInfo.primary_exchange;
+    newContext.descripiton = tickerInfo.description;
     const exch = await getExchangeName(apiKey, tickerInfo.primary_exchange);
     if (exch) {
       newContext.market.name = exch.name;
