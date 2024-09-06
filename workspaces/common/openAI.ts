@@ -183,14 +183,17 @@ const getSimilar = async (apiKey: string, polygonKey: string, context: Context):
               const errText = res.text();
               console.error('error response from openAI', {status: res.status, statusText: res.statusText, msg: errText});
               return {
-                type:'cfi.completion',
-                result: errText,
+                type:'cfi.error',
+                message: errText,
               };
             }
           } catch(e) {
             console.error('error calling openAI api', {err: e});
           }
-          return context;
+          return {
+            type:'cfi.error',
+            message: 'No Results Found',
+          };
 }
 
 const getCompanySummary = async (apiKey: string, polygonKey: string, context: Context):Promise<Context> => {
@@ -248,14 +251,17 @@ const getCompanySummary = async (apiKey: string, polygonKey: string, context: Co
       const errText = res.text();
       console.error('error response from openAI', {status: res.status, statusText: res.statusText, msg: errText});
       return {
-        type:'cfi.completion',
+        type:'cfi.error',
         result: errText,
       };
     }
   } catch(e) {
     console.error('error calling openAI api', {err: e});
   }
-  return context;
+  return {
+    type:'cfi.error',
+    result: 'No Results Found',
+  };
 }
 
 export const openAIHook = async (apiKey: string, polygonKey: string, intent: string, context:Context) => {
