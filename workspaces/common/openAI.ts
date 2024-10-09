@@ -211,7 +211,6 @@ const getCompanySummary = async (apiKey: string, polygonKey: string, context: Co
             and a brief analysis of recent trends based on the industry, recent events, and the provided historic pricing.
             The company information is in JSON format with the following fields:
             ${companyInfoDefinitions}
-
             The company information is as follows:  ${JSON.stringify(info)}
             The company pricing information is for the past 365 days and in a JSON array with the following format: 
               - c (number): The close price for the symbol in the given time period.
@@ -223,9 +222,7 @@ const getCompanySummary = async (apiKey: string, polygonKey: string, context: Co
               - t (number): The Unix Msec timestamp for the start of the aggregate window.
               - v (number): The trading volume of the symbol in the given time period.
               - vw (number): The volume weighted average price.
-    
             Pricing data is as follows: ${JSON.stringify(prices)}
-
             `
         }
     ]
