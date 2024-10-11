@@ -1,5 +1,5 @@
-import type { DeliveryHookRequest } from "../common/types"
-import { exateHook } from "../common/exate";
+import type { DeliveryHookRequest } from "../../common/lib/types"
+import { exateHook } from "../../common/hooks/exate";
 
 export async function handler(event:any) {
 
@@ -9,5 +9,5 @@ export async function handler(event:any) {
 
     const { context, destinations } = JSON.parse(event.body) as DeliveryHookRequest;
 
-    return exateHook(apiKey, clientId, clientSecret, context, destinations);
+    return exateHook({keys:{apiKey, clientId, clientSecret}, context, destinations});
 }

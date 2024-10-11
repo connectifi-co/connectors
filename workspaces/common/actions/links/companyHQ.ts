@@ -1,7 +1,8 @@
 import type { Context as FDC3Context, Instrument } from '@finos/fdc3';
 import { ContextTypes } from '@finos/fdc3';
-import{ enahanceInstrument } from './polygon';
-import { awsResponse } from './utils';
+import{ enahanceInstrument } from '../../lib/polygon';
+import { createResponse } from '../../lib/utils';
+import { ActionHandler } from '../../lib/types';
 
 const cleanPostalCode = (code: string): string => {
     if (code) {
@@ -11,7 +12,14 @@ const cleanPostalCode = (code: string): string => {
     return code;
 };
 
-export const companyHQ = async (apiKey: string, context:FDC3Context) => {
+export const companyHQ: ActionHandler = async (params) => {
+  const {context, keys} = {...params};
+  const apiKey = keys && keys['apiKey'];
+  if (!apiKey){
+    return createResponse(400, {
+      message: 'api key not found',
+    });
+  }
   if (context.type === ContextTypes.Instrument) {
     const newCtx = await enahanceInstrument(apiKey, context as Instrument);
     let url = '';
@@ -24,10 +32,10 @@ export const companyHQ = async (apiKey: string, context:FDC3Context) => {
     }
     console.log(`url result: ${url}`);
 
-    return awsResponse(200, {url});
+    return createResponse(200, {url});
   } 
 
-  return awsResponse(400, {
+  return createResponse(400, {
     message: 'bad context type',
   });
 }
