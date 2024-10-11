@@ -1,7 +1,7 @@
-import { awsResponse } from "../common/utils";
+import { createResponse } from "../common/lib/utils";
 
 export async function handler(event:any) {
-  return awsResponse(200, {
+  return createResponse(200, {
     message: 'Connectifi Hooks!',
     input: event,
   });

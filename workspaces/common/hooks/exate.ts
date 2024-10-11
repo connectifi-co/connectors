@@ -1,7 +1,7 @@
 import type { Context } from '@finos/fdc3';
-import { EXATE_ID_URL, EXATE_DATA_URL } from './constants';
-import { awsResponse } from './utils';
-
+import { EXATE_ID_URL, EXATE_DATA_URL } from '../lib/constants';
+import { DeliveryHookHandler } from '../lib/types';
+import { createResponse } from '../lib/utils';
 
 interface HookItem {
   destination: string;
@@ -90,8 +90,17 @@ const filterContext = async (apiKey: string, clientId: string, clientSecret: str
     return JSON.parse(dataJson.dataSet) as Context;
 };
 
-export const exateHook = async (apiKey: string, clientId: string, clientSecret: string, context: Context, destinations: string[]) => {
+export const exateHook: DeliveryHookHandler = async (params) => {
+  const {keys, context, destinations} = {...params};
       const changes: Array<HookItem> = [];
+      const apiKey = keys && keys["apiKey"];
+      const clientId = keys && keys["clientId"];
+      const clientSecret = keys && keys["clientSecret"];
+      if (!apiKey || ! clientId || !clientSecret){
+        return createResponse(400, {
+          message: 'api keys not found',
+        });
+      }
       for (let destinationId  of destinations) {
         const newCtx = await filterContext(apiKey, clientId, clientSecret, destinationId, context);
         changes.push({
@@ -100,5 +109,5 @@ export const exateHook = async (apiKey: string, clientId: string, clientSecret: 
           } as HookItem);
       }
   
-      return awsResponse(200, {changes});
+      return createResponse(200, {changes});
   };

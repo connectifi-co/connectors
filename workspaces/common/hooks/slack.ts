@@ -1,7 +1,8 @@
 import type { Context as FDC3Context, Contact } from '@finos/fdc3';
 import { ContextTypes } from '@finos/fdc3';
-import { SLACK_USER_LOOKUP_URL } from './constants';
-import { awsResponse } from './utils';
+import { SLACK_USER_LOOKUP_URL } from '../lib/constants';
+import { createResponse } from '../lib/utils';
+import { DeliveryHookHandler } from '../lib/types';
 
 const enahanceContact = async (apiKey: string, context:Contact):Promise<FDC3Context> => {
   const email = context.id.email;
@@ -36,7 +37,14 @@ const enahanceContact = async (apiKey: string, context:Contact):Promise<FDC3Cont
   return context;
 }
 
-export const slackHook = async (apiKey: string, context:FDC3Context, destinations: string[]) => {
+export const slackHook: DeliveryHookHandler = async (params) => {
+  const {keys, context, destinations} = {...params};
+  const apiKey = keys && keys['apiKey'];
+  if (! apiKey){
+    return createResponse(400, {
+      message: 'no api key provided',
+    });
+  }
   if (context.type === ContextTypes.Contact) {
     const newCtx = await enahanceContact(apiKey, context as Contact);
     const changes = destinations.map(destination => ({
@@ -44,10 +52,10 @@ export const slackHook = async (apiKey: string, context:FDC3Context, destination
       context: newCtx,
     }));
 
-    return awsResponse(200, {changes});
+    return createResponse(200, {changes});
   }
 
-  return awsResponse(400, {
+  return createResponse(400, {
     message: 'bad context type',
   });
 }

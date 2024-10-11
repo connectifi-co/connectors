@@ -1,9 +1,9 @@
-import type { Context as FDC3Context, Instrument } from '@finos/fdc3';
-import { ContextTypes } from '@finos/fdc3';
-import { OPENFIGI_TICKER_INFO_URL } from './constants';
-import { awsResponse } from './utils';
+import { Context, ContextTypes, Instrument } from '@finos/fdc3';
+import { OPENFIGI_TICKER_INFO_URL } from '../lib/constants';
+import { createResponse } from '../lib/utils';
+import { DeliveryHookHandler } from '../lib/types';
 
-export const addFIGIToInstrument = async (apiKey: string, context:Instrument):Promise<FDC3Context> => {
+export const addFIGIToInstrument = async (apiKey: string, context:Instrument):Promise<Context> => {
   const ticker = context.id.ticker;
   const req = {
     "query": ticker,
@@ -38,7 +38,14 @@ export const addFIGIToInstrument = async (apiKey: string, context:Instrument):Pr
   return context;
 }
 
-export const openFIGIHook = async (apiKey: string, context:FDC3Context, destinations: string[]) => {
+export const openFIGIHook: DeliveryHookHandler = async (params) => {
+  const {keys, context, destinations} = {...params};
+  const apiKey = keys && keys['apiKey'];
+  if (! apiKey){
+    return createResponse(400, {
+      message: 'no api key provided'
+    });
+  }
   if (context.type === ContextTypes.Instrument) {
     const newCtx = await addFIGIToInstrument(apiKey, context as Instrument);
     const changes = destinations.map(destination => ({
@@ -48,10 +55,10 @@ export const openFIGIHook = async (apiKey: string, context:FDC3Context, destinat
   
     console.log('figi hook changes', {changes});
   
-    return awsResponse(200, changes);
+    return createResponse(200, changes);
   }
 
-  return awsResponse(400, {
+  return createResponse(400, {
     message: 'bad context type',
   });
 }

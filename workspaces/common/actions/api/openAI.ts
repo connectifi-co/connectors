@@ -1,6 +1,7 @@
 import type { Context } from '@finos/fdc3';
-import { OPENAI_COMPLETIONS_URL, POLYGON_TICKER_INFO_URL, POLYGON_PRICE_HISTORY_URL } from './constants';
-import { awsResponse } from './utils';
+import { OPENAI_COMPLETIONS_URL, POLYGON_TICKER_INFO_URL, POLYGON_PRICE_HISTORY_URL } from '../../lib/constants';
+import { createResponse } from '../../lib/utils';
+import { ActionHandler } from '../../lib/types';
 
 const tickerCache: Map<string, any> = new Map<string, any>();
 const priceCache: Map<string, any> = new Map<string, any>();
@@ -8,7 +9,6 @@ const priceCache: Map<string, any> = new Map<string, any>();
 const getTickerInfo = async (apiKey: string, ticker:string): Promise<any> => {
   const tickerKey = ticker.toUpperCase();
   if (tickerCache.has(tickerKey)) {
-    console.log(`ticker: ${ticker} is in cache`);
     return tickerCache.get(tickerKey);
   }
 
@@ -261,19 +261,27 @@ const getCompanySummary = async (apiKey: string, polygonKey: string, context: Co
   };
 }
 
-export const openAIHook = async (apiKey: string, polygonKey: string, intent: string, context:Context) => {
+export const openAIHook: ActionHandler = async (params) => {
+  const { context, intent, keys} = {...params};
   console.log('openAI', context);
+  const apiKey = keys && keys['apiKey'];
+  const polygonKey = keys && keys['polygonKey'];
+  if (!apiKey || !polygonKey){
+    return createResponse(400, {
+      message: 'api keys not found',
+    });
+  }
   if (intent === "GenerateSummary") {
     const completion = await getCompanySummary(apiKey, polygonKey, context);
 
-    return awsResponse(200, completion);
+    return createResponse(200, completion);
   } 
   if (intent === "FindSimilar"){
     const instrumentList = await getSimilar(apiKey, polygonKey, context);
-    return awsResponse(200, instrumentList);
+    return createResponse(200, instrumentList);
   }
 
-  return awsResponse(400, {
+  return createResponse(400, {
     message: 'intent not found',
   });
 }

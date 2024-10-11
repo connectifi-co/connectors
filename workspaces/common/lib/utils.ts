@@ -1,4 +1,6 @@
-export const awsResponse = (statusCode:number, body: any) => {
+import { HTTPResponse } from "./types";
+
+export const createResponse = (statusCode:number, body: any): HTTPResponse => {
   return {
     statusCode,
     headers: {
