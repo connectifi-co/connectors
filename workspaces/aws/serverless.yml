@@ -60,6 +60,13 @@ functions:
           path: /emailLink
           method: POST
 
+  teamsLink:
+    handler: actions/teamsLink.handler
+    events:
+      - httpApi:
+          path: /teamsLink
+          method: POST
+
   openAI:
     handler: actions/openAI.handler
     events:
