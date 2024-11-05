@@ -1,10 +1,12 @@
 # Connectifi Connectors
-
 Example Actions Connectors and Delivery Hooks for the Connectifi Integration Platform. Use this repo as a starting point and building blocks for implementing your own integrations with Connectifi.
 
-## About Connectifi 
+## About Connectifi
+Connectifi is a next generation integration platform that connects applications, services, and agents with deep user experience integration that works across any device and client technology.  Connectifi integrates full stack, with support for the FDC3 protocol for UI integration and REST integration with services and SaaS applications.
 
-## Connecting with Context Data and Intents
+## Working with Context Data and Intents
+
+Inspired by the Android and Apple intents systems, Connectifi uses Intents and Context metadata to describe functions and data interfaces and support reusable, plug and play integrations across APIs and apps.  Use the provided FDC3 and Connect name spaces and/or define your own.  
 
 ## Connector Types
 
@@ -28,14 +30,16 @@ API Actions allow an application to leverage REST services to return data for an
 
 <img src="./images/apiAction-diagram.jpeg" alt="API Action Diagram" width="80%">
 
-## what's inside
+# Using this Project 
+
+## What's inside
 
 Connector implementations, written in Typescript, along with Serverless configurations for common cloud providers.  Currently supported providers are:
  - AWS
- - Azure
- - Google
+ - Azure (TBD)
+ - Google (TBD)
 
-## getting started
+## Getting Started
 
 The first step is to install the dependencies for this repo:
 
@@ -45,22 +49,29 @@ npm install
 
 Once you have the dependencies installed, the next thing to do is select your cloud provider.  You'll need to have your credentials all setup in order to deploy the API functions.  There is more info in the README files in each provider directory.
 
-### deployment
+### Deployment
 
 Deployment is standard serverless deployment.  There is more info in the README files in each provider directory.
 
-## directories
+## Directories
 
 NPM workspaces project.  There are workspaces for all the cloud providers which contain serverless configs as well as some common etc folders.
 
 - `workspaces/aws` where all the AWS serverless configuration lives
-- `workspaces/azure` where all the Azure serverless configuration lives
-- `workspaces/google` where all the Google configuration lives
 - `workspaces/common` common typescript functions, most of the code lives here
+- `workspaces/common/actions` home for *Action* type connectors
+- `workspaces/common/hooks` home for *Delivery Hook* type connectors
 
-## hook input/test data
+## Adding a Connector
+Adding a new connector is easy.  Follow these steps for AWS:
+- Put your business logic, according to connector type, into the `workspaces/common` directory
+- Add an AWS entry point into `workspaces/aws`, using the `actions` or `hooks` folder, depending on your connector type
+- Make an entry in `workspaces/aws/serverless.yml` to expose the endpoint for your connector and direct it to your entry point in `workspaces/aws`
+- test, deploy, and call it from your Connectifi environment!
 
-To make it easier to test hooks, there are some generic data utilities included in the project.  The can be used to generate input to hooks from an HTTP standpoint or generate specific provider events for executing functions directly.
+## Test Data
+
+To make it easier to test connectors, there are some generic data utilities included in the project.  The can be used to generate input from an HTTP standpoint or generate specific provider events for executing functions directly.
 
 Some examples of using the test utility are below.  The generator will simply output the JSON to standard out.  you can copy/paste from your terminal or pipe to files.
 
