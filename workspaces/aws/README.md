@@ -1,6 +1,6 @@
-# Connectifi Hooks for AWS
+# Connectifi Connectors for AWS
 
-This configuration will create the hook lambdas and API gateway in AWS using the Serverless framework.
+This configuration will create the connector lambdas and API gateway in AWS using the Serverless framework.
 
 ## Usage
 
