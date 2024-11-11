@@ -7,15 +7,19 @@ const contextDescriptors = [
     `Context type of 'fdc3.contact' describes a person or contact - typically from a CRM or similar system.  The 'id' property lists common identifiers for the contact such as 'email'.`,
 ];
 
-
-const contextToPrompt = (context: Context): string => {
-    return `Use the following FDC3 context data object to generate a summary of the entity it describes.  
+const createSystemPrompt = (): string => {
+    return `You will be provided with a an FDC3 context data object.  You will generate a summary of the entity it describes.  
     For example: 
         If the context data is describing a company, provide a summary of the company.  
         If the context data is describing a country, provide a summary of the country.
         If the context data is a list or a portfolio, provide a summary of the contents of the list or portfolio.
     Here are some kinds of things that a context data object could describe, based on the context type:
     ${contextDescriptors.join('/n')}
+    `;
+};
+
+const contextToPrompt = (context: Context): string => {
+    return `
     The FDC3 context data is as follows:
     ${JSON.stringify(context)}
     `;
@@ -40,6 +44,7 @@ export const summarize = async (apiKey: string, context: Context):Promise<Summar
     });
 
     const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
+    messages.push({ role: "system", content: createSystemPrompt()});
     messages.push({ role: "user", content: contextToPrompt(context)});
     messages.push({ role: "user", content: dataReturnPrompt});
 
