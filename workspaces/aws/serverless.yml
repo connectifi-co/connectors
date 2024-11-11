@@ -25,11 +25,11 @@ functions:
           path: /openfigi
           method: POST
 
-  polygon:
+  polygonHook:
     handler: hooks/polygon.handler
     events:
       - httpApi:
-          path: /polygon
+          path: /polygonHook
           method: POST
 
   slack:
@@ -38,19 +38,12 @@ functions:
       - httpApi:
           path: /slack
           method: POST
-    
-  exate:
-    handler: hooks/exate.handler
-    events:
-      - httpApi:
-          path: /exate
-          method: POST
 
-  companyHQ:
-    handler: actions/companyHQ.handler
+  mapLink:
+    handler: actions/mapLink.handler
     events:
       - httpApi:
-          path: /companyHQ
+          path: /mapLink
           method: POST
   
   emailLink:
@@ -73,7 +66,14 @@ functions:
       - httpApi:
           path: /openAI
           method: POST
-          
+
+  polygonIO:
+    handler: actions/polygonIO.handler
+    events:
+      - httpApi:
+          path: /polygonIO
+          method: POST
+  
 plugins:
   - serverless-esbuild
   - serverless-dotenv-plugin

@@ -1,8 +1,8 @@
 import type { Context as FDC3Context, Instrument } from '@finos/fdc3';
 import { ContextTypes } from '@finos/fdc3';
-import{ enahanceInstrument } from '../../lib/polygon';
-import { createResponse } from '../../lib/utils';
-import { ActionHandler } from '../../lib/types';
+import{ getTickerInfo } from '../../../lib/polygon';
+import { createResponse } from '../../../lib/utils';
+import { ActionHandler } from '../../../lib/types';
 
 const cleanPostalCode = (code: string): string => {
     if (code) {
@@ -21,7 +21,7 @@ export const companyHQ: ActionHandler = async (params) => {
     });
   }
   if (context.type === ContextTypes.Instrument) {
-    const newCtx = await enahanceInstrument(apiKey, context as Instrument);
+    const newCtx = await getTickerInfo(apiKey, context.id?.ticker);
     let url = '';
     console.log(`get address from ${JSON.stringify(newCtx)}`);
     if (newCtx.address){

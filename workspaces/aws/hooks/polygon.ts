@@ -1,5 +1,5 @@
 import type { DeliveryHookRequest } from "../../common/lib/types"
-import { polygonHook } from "../../common/hooks/polygon";
+import { polygonHook } from "../../common/hooks/polygonIO/index";
 
 export async function handler(event:any) {
 

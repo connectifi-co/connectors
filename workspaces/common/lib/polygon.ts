@@ -1,4 +1,3 @@
-import type { Context, Instrument } from '@finos/fdc3';
 import { POLYGON_TICKER_INFO_URL, POLYGON_EXCHANGE_INFO_URL } from './constants';
 
 const exchangeAcronyms = [
@@ -11,7 +10,7 @@ const exchangeAcronyms = [
       acronym: 'NASDAQ',
     },
   ];
-  const getExchangeAcronym = (mic: string): string | undefined => {
+  export const getExchangeAcronym = (mic: string): string | undefined => {
     const ex = exchangeAcronyms.find((ex:any) => ex.mic === mic);
     return ex && ex.acronym;
   }
@@ -36,7 +35,7 @@ const exchangeAcronyms = [
     }
   }
   
-  const getExchangeName = async (apiKey: string, mic: string): Promise<any> => {
+  export const getExchangeName = async (apiKey: string, mic: string): Promise<any> => {
     if (!exchangeData) {
       await loadExchangeData(apiKey);
     }
@@ -81,30 +80,4 @@ const exchangeAcronyms = [
     return undefined;
   }
   
-  export const enahanceInstrument = async (apiKey: string, context:Instrument): Promise<Instrument> => {
-    const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker?.toUpperCase() || '')
-    if (tickerInfo) {
-      const newContext:Instrument = {...context};
-      newContext.name = tickerInfo.name;
-      newContext.id.FIGI = tickerInfo.composite_figi;
-      if (!newContext.market) {
-        newContext.market = {};
-      }
-      newContext.market.COUNTRY_ISOALPHA2 = tickerInfo.locale;
-      newContext.market.MIC = tickerInfo.primary_exchange;
-      newContext.descripiton = tickerInfo.description;
-      const exch = await getExchangeName(apiKey, tickerInfo.primary_exchange);
-      if (exch) {
-        newContext.market.name = exch.name;
-      }
-      const acronym = getExchangeAcronym(tickerInfo.primary_exchange);
-      if (acronym) {
-        newContext.market.acronym = acronym;
-      }
-      newContext.currency = tickerInfo.currency_name;
-      newContext.address = tickerInfo.address;
-      newContext.homepage_url = tickerInfo.homepage_url;
-      return newContext;
-    }
-    return context;
-  }
+ 

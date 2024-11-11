@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@finos/fdc3": "2.0.3",
+    "openai": "^4.71.1",
     "serverless": "^3.38.0",
     "ts-node": "^10.9.2"
   }
