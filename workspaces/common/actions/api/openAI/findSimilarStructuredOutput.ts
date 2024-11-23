@@ -15,7 +15,7 @@ const findSimilarPrompt = `
 
     Return the list of similar entities as a JSON object with the following structure:
     {
-        "instruments": [
+        "contexts": [
             {
                 "type": "fdc3.instrument",
                 "id": {
