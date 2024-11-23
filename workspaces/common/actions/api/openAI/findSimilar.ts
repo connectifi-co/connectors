@@ -61,7 +61,7 @@ console.log('****Chat Completion', chatCompletion);
         const itemsContent = chatCompletion?.choices[0].message.content;
         console.log('****Chat Completion - itemsContent', itemsContent);
         if (itemsContent){
-            items = itemsContent;
+            items = JSON.parse(itemsContent);
         }
     }
     return  {
