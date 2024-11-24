@@ -1,15 +1,38 @@
 import OpenAI from "openai";
 import { validateChatCompletion } from "./validation-utils";
 import { FDC3ContextSchema, FDC3InstrumentListSchema } from "./schemas";
+import { ChatCompletion } from "openai/resources";
+import { create } from "ts-node";
 
 const OPENAI_MODEL = "gpt-4o-mini";
+
+const createMockChatCompletion = (mockChatResponseContent:string):ChatCompletion => {
+   return {
+    id: "chatcmpl-123",
+    object: "chat.completion",
+    created: Math.floor(Date.now() / 1000),
+    model: OPENAI_MODEL,
+    choices: [
+      {
+        message: {
+          role: "assistant",
+          content: mockChatResponseContent,
+          refusal: null,
+        },
+        finish_reason: "stop",
+        index: 0,
+        logprobs: null,
+      },
+    ],
+  }
+}
 
 describe("OpenAI Chat Completions - Structured Outputs", () => {
   jest.mock("openai");
 
   let openai: OpenAI = {} as any;
 
-  const mockValidChatRequestContent = JSON.stringify({
+  const mockValidChatResponseContent = JSON.stringify({
     contexts: [
       { type: "fdc3.instrument", id: { ticker: "MSFT" } },
       { type: "fdc3.instrument", id: { ticker: "IBM" } },
@@ -18,24 +41,7 @@ describe("OpenAI Chat Completions - Structured Outputs", () => {
 
   beforeEach(() => {
     openai = new OpenAI({ apiKey: "cfi-test-key" } as any);
-    jest.spyOn(openai.chat.completions, "create").mockResolvedValue({
-      id: "chatcmpl-123",
-      object: "chat.completion",
-      created: Math.floor(Date.now() / 1000),
-      model: OPENAI_MODEL,
-      choices: [
-        {
-          message: {
-            role: "assistant",
-            content: mockValidChatRequestContent,
-            refusal: null,
-          },
-          finish_reason: "stop",
-          index: 0,
-          logprobs: null,
-        },
-      ],
-    });
+    jest.spyOn(openai.chat.completions, "create").mockResolvedValue(createMockChatCompletion(mockValidChatResponseContent));
   });
 
   afterEach(() => {
@@ -61,7 +67,7 @@ describe("OpenAI Chat Completions - Structured Outputs", () => {
 
     validateChatCompletion(
       chatCompletion,
-      mockValidChatRequestContent,
+      mockValidChatResponseContent,
       FDC3InstrumentListSchema
     );
   });
@@ -83,24 +89,7 @@ describe("OpenAI Chat Completions - Negative Tests", () => {
   test("should handle malformed JSON response", async () => {
     const mockMalformedChatResponseContent = "invalid json";
 
-    jest.spyOn(openai.chat.completions, "create").mockResolvedValue({
-      id: "chatcmpl-123",
-      object: "chat.completion",
-      created: Math.floor(Date.now() / 1000),
-      model: OPENAI_MODEL,
-      choices: [
-        {
-          message: {
-            role: "assistant",
-            content: mockMalformedChatResponseContent,
-            refusal: null,
-          },
-          finish_reason: "stop",
-          index: 0,
-          logprobs: null,
-        },
-      ],
-    });
+    jest.spyOn(openai.chat.completions, "create").mockResolvedValue(createMockChatCompletion(mockMalformedChatResponseContent));
 
     const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> =
       [];
@@ -133,24 +122,7 @@ describe("OpenAI Chat Completions - Negative Tests", () => {
       { type: "fdc3.instrument", id: { ticker: "IBM" } },
     ]);
 
-    jest.spyOn(openai.chat.completions, "create").mockResolvedValue({
-      id: "chatcmpl-123",
-      object: "chat.completion",
-      created: Math.floor(Date.now() / 1000),
-      model: "gpt-4mini",
-      choices: [
-        {
-          message: {
-            role: "assistant",
-            content: mockIncorrectSchemaChatResponseContent,
-            refusal: null,
-          },
-          finish_reason: "stop",
-          index: 0,
-          logprobs: null,
-        },
-      ],
-    });
+    jest.spyOn(openai.chat.completions, "create").mockResolvedValue(createMockChatCompletion(mockIncorrectSchemaChatResponseContent));
 
     const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> =
       [];
@@ -183,24 +155,7 @@ describe("OpenAI Chat Completions - Negative Tests", () => {
       { type: "fdc3.instrument", id: {} }, // Empty id object
     ]);
 
-    jest.spyOn(openai.chat.completions, "create").mockResolvedValue({
-      id: "chatcmpl-123",
-      object: "chat.completion",
-      created: Math.floor(Date.now() / 1000),
-      model: "gpt-4mini",
-      choices: [
-        {
-          message: {
-            role: "assistant",
-            content: mockMissingFieldsChatResponseContent,
-            refusal: null,
-          },
-          finish_reason: "stop",
-          index: 0,
-          logprobs: null,
-        },
-      ],
-    });
+    jest.spyOn(openai.chat.completions, "create").mockResolvedValue(createMockChatCompletion(mockMissingFieldsChatResponseContent));
 
     const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> =
       [];
