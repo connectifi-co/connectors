@@ -22,7 +22,6 @@ describe('OpenAI Integration Tests', () => {
     expect(result.type).toBe('connect.list');
     expect(result.listType).toBe('fdc3.instrument');
     expect(result.items.length).toBeGreaterThan(0);
-    console.log(`what is the type here?: ${result.items[0].type}`);
     expect(result.items[0].type).toBe('fdc3.instrument');
     expect(result.items[0].id).toHaveProperty('ticker');
     console.log('openai response: ${result}');
