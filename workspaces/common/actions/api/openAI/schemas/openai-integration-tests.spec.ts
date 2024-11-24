@@ -24,7 +24,6 @@ describe('OpenAI Integration Tests', () => {
     expect(result.items.length).toBeGreaterThan(0);
     expect(result.items[0].type).toBe('fdc3.instrument');
     expect(result.items[0].id).toHaveProperty('ticker');
-    console.log('openai response: ${result}');
   }, 10_000);
 
   it.skip('should handle unexpected errors gracefully', async () => {
