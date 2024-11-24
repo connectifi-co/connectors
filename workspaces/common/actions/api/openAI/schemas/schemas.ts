@@ -3,7 +3,6 @@ import { z } from 'zod';
 export const FDC3ContextSchema = z.object({
   type: z.string(),
   id: z.object({}),
-  //name: z.optional(z.string())
 });
 
 export const FDC3InstrumentSchema = z.object({

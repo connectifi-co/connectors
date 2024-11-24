@@ -1,6 +1,6 @@
 // openai-integration-tests.spec.ts
 import { Context } from '@finos/fdc3';
-import { findSimilar } from '../findSimilarStructuredOutput'; // Adjust the import path accordingly
+import { findSimilar } from '../findSimilar'; // Adjust the import path accordingly
 import { List } from '../../../../lib/types';
 
 // set this via your env and run

@@ -1,5 +1,4 @@
 import { ChatCompletion } from 'openai/resources';
-import { FDC3InstrumentListSchema } from './schemas';
 
 /**
  * Required to ensure JSON.stringify'd and zod.parse'd objects can be compared by property value,

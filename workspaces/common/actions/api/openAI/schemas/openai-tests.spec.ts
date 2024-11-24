@@ -1,8 +1,7 @@
 import OpenAI from "openai";
 import { validateChatCompletion } from "./validation-utils";
-import { FDC3ContextSchema, FDC3InstrumentListSchema } from "./schemas";
+import { FDC3InstrumentListSchema } from "./schemas";
 import { ChatCompletion } from "openai/resources";
-import { create } from "ts-node";
 
 const OPENAI_MODEL = "gpt-4o-mini";
 
