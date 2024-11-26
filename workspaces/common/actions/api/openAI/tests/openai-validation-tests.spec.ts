@@ -47,7 +47,7 @@ describe("OpenAI Chat Completions- validate", () => {
   jest.mock("openai");
 
   let openai: OpenAI = {} as any;
-  const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
+  let messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
 
   const mockValidChatResponseContent = JSON.stringify({
     contexts: [
@@ -63,7 +63,7 @@ describe("OpenAI Chat Completions- validate", () => {
       .mockResolvedValue(
         createMockChatCompletion(mockValidChatResponseContent),
       );
-    const messages = createMockChatCompletionMessageParam;
+    messages = createMockChatCompletionMessageParam();
   });
 
   afterEach(() => {

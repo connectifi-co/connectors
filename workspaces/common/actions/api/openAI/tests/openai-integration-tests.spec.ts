@@ -3,19 +3,19 @@ import { Context } from "@finos/fdc3";
 import { findSimilar } from "../findSimilar"; // Adjust the import path accordingly
 import { List } from "../../../../lib/types";
 
-// set this via your env
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
-const CFI_OPENAI_INTEGRATION = process.env.CFI_OPENAI_INTEGRATION || "";
+// set these via your env
+const CFI_OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
+const CFI_OPENAI_INTEGRATION_TESTS = process.env.CFI_OPENAI_INTEGRATION || "";
 
 describe("OpenAI Integration Tests", () => {
-  if (CFI_OPENAI_INTEGRATION === "") {
+  if (CFI_OPENAI_INTEGRATION_TESTS === "") {
     it("Integration tests are disabled. Set env vars to enable them.", () => {
       console.log(
         "Integration tests are currently disabled. Please set the CFI_OPENAI_INTEGRATION and OPENAI_API_KEY environment variables to enable them.",
       );
     });
   } else {
-    const apiKey = OPENAI_API_KEY;
+    const apiKey = CFI_OPENAI_API_KEY;
     const context: Context = {
       type: "fdc3.instrument",
       id: {
@@ -34,7 +34,7 @@ describe("OpenAI Integration Tests", () => {
       expect(result.items[0].id).toHaveProperty("ticker");
     }, 10_000);
 
-    it("should reject and throw due wrong API_KEY", async () => {
+    it("should reject and throw due to incorrect API_KEY", async () => {
       await expect(findSimilar("badkey", context)).rejects.toThrow();
     }, 10_000);
   }

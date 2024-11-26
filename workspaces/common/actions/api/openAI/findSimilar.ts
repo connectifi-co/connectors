@@ -1,8 +1,6 @@
 import type { Context } from '@finos/fdc3';
 import { List } from '../../../lib/types';
 import OpenAI from "openai";
-import { zodResponseFormat } from 'openai/helpers/zod';
-import { FDC3InstrumentListSchema } from './schemas/schemas';
 
 const contextDescriptors = [
     `Context type of 'fdc3.instrument' describes a stock or other financial instrument.  The 'id' property lists common identifiers for the instrument such as 'ticker'.`,
@@ -58,7 +56,6 @@ export const findSimilar = async (apiKey: string, context: Context):Promise<List
     const chatCompletion = await openai.chat.completions.create({
         messages,
         model: "gpt-4o-mini",
-        response_format: zodResponseFormat(FDC3InstrumentListSchema, "FDC3TestResponse"),
     });
 
     console.log('****Chat Completion', chatCompletion);
@@ -66,7 +63,7 @@ export const findSimilar = async (apiKey: string, context: Context):Promise<List
         const itemsContent = chatCompletion?.choices[0].message.content;
         console.log('****Chat Completion - itemsContent', itemsContent);
         if (itemsContent){
-            let contexts = JSON.parse(itemsContent);
+            const contexts = JSON.parse(itemsContent);
             items = contexts.contexts;
         }
     }

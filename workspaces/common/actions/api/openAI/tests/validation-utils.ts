@@ -16,26 +16,20 @@ const ObjectPropertySorter = (a: any, b: any) => {
 export const validateChatCompletion = (
   chatCompletion: ChatCompletion,
   mockChatResponseContent: string,
-  schema: Zod.ZodObject<any> | Zod.ZodArray<any>,
+  schema: Zod.ZodObject<any> | Zod.ZodArray<any>
 ): void => {
-  try {
-    if (chatCompletion.choices[0].message.content !== null) {
-      const parsedContent = JSON.parse(
-        chatCompletion.choices[0].message.content,
-      );
-      // Sort the parsed content array by properties
-      parsedContent.contexts.sort(ObjectPropertySorter);
+  if (chatCompletion.choices[0].message.content !== null) {
+    const parsedContent = JSON.parse(chatCompletion.choices[0].message.content);
+    // Sort the parsed content array by properties
+    parsedContent.contexts.sort(ObjectPropertySorter);
 
-      // Sort the mockChatResponseContent array by properties for comparison
-      const sortedMockContent = JSON.parse(mockChatResponseContent);
-      sortedMockContent.contexts.sort(ObjectPropertySorter);
+    // Sort the mockChatResponseContent array by properties for comparison
+    const sortedMockContent = JSON.parse(mockChatResponseContent);
+    sortedMockContent.contexts.sort(ObjectPropertySorter);
 
-      const validatedContent = schema.parse(parsedContent);
+    const validatedContent = schema.parse(parsedContent);
 
-      // Compare the sorted arrays
-      expect(validatedContent).toEqual(sortedMockContent);
-    }
-  } catch (error) {
-    throw error;
+    // Compare the sorted arrays
+    expect(validatedContent).toEqual(sortedMockContent);
   }
 };

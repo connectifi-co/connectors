@@ -102,3 +102,18 @@ npm run data:http fdc3.instrumentList AMZN,TSLA,BBG
 
 ```
 
+### Local testing
+To run available tests locally run 
+
+```bash
+npm run test
+```
+
+If you want to quickly test OpenAI connectors in your local environment set the following env variables
+
+```bash
+export CFI_OPENAI_API_KEY=<your api key>
+export CFI_OPENAI_INTEGRATION_TESTS=true # any value will work
+```
+
+
