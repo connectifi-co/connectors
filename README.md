@@ -102,3 +102,19 @@ npm run data:http fdc3.instrumentList AMZN,TSLA,BBG
 
 ```
 
+## Unit and Integration tests
+
+```bash
+npm run test
+```
+
+If you want to enable integration testing of OpenAI connectors in your local environment set the following env variables:
+
+```bash
+export CFI_OPENAI_API_KEY=<your api key>
+export CFI_OPENAI_INTEGRATION_TESTS=true # any value will work
+```
+
+This will enable the tests in `workspaces/common/actions/api/openAI/tests/openai-integration-tests.spec.ts`. You can extend or use these tests as a template for your openAI actions
+
+

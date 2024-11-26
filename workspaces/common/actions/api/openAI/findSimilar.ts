@@ -9,26 +9,27 @@ const contextDescriptors = [
 
 
 const findSimilarPrompt = `
-    You will be provided with an FDC3 context data object.  Your task is to create a list of FDC3 context data objects most similar to the context data provided.  
-    Similarity is based on the content the provided context data is describing.  
+    You will be provided with an FDC3 context data object. Your task is to create a list of FDC3 context data objects most similar to the context data provided. Similarity is based on the content the provided context data is describing.
 
-    Return the list of similar entities as a javascript array of FDC3 context data objects of the same type as the context data object provided as the input.
-    For example, if the context data provided has a type property of 'fdc3.instrument', then the response would look like this:
-    [   
-        {
-            "type":"fdc3.instrument",
-            "id": {
-                "ticker": "MSFT"
+    Return the list of similar entities as a JSON object with the following structure:
+    {
+        "contexts": [
+            {
+                "type": "fdc3.instrument",
+                "id": {
+                    "ticker": "MSFT"
+                }
+            },
+            {
+                "type": "fdc3.instrument",
+                "id": {
+                    "ticker": "IBM"
+                }
             }
-        },
-        {
-            "type":"fdc3.instrument",
-            "id": {
-                "ticker": "IBM"
-            }
-        }
-    ]
-    You should only return the JSON array of FDC3 context data like above, and no other content.
+        ]
+    }
+
+    Do not include additional fields or any explanatory text. Only return the JSON object in the specified format.
 `;
 
 const contextToPrompt = (context: Context): string => {
@@ -51,17 +52,19 @@ export const findSimilar = async (apiKey: string, context: Context):Promise<List
 
     messages.push({ role: "system", content: findSimilarPrompt});
     messages.push({ role: "user", content: contextToPrompt(context)});
-console.log('calling chatGPT', messages);
+    console.log('calling chatGPT', messages);
     const chatCompletion = await openai.chat.completions.create({
         messages,
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
     });
-console.log('****Chat Completion', chatCompletion);
+
+    console.log('****Chat Completion', chatCompletion);
     if (chatCompletion?.choices.length > 0){
         const itemsContent = chatCompletion?.choices[0].message.content;
         console.log('****Chat Completion - itemsContent', itemsContent);
         if (itemsContent){
-            items = itemsContent;
+            const contexts = JSON.parse(itemsContent);
+            items = contexts.contexts;
         }
     }
     return  {

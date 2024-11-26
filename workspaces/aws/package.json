@@ -1,11 +1,18 @@
 {
   "scripts": {
-    "deploy": "serverless deploy --stage "
+    "deploy": "serverless deploy --stage ",
+    "undeploy": "serverless remove --stage"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "esbuild": "^0.14.25",
+    "jest": "^29.7.0",
     "serverless-dotenv-plugin": "^6.0.0",
     "serverless-esbuild": "^1.25.0",
-    "serverless-plugin-resource-tagging": "^1.2.0"
+    "serverless-plugin-resource-tagging": "^1.2.0",
+    "ts-to-zod": "^3.13.0"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
   }
 }
