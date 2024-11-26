@@ -1,14 +1,12 @@
-import { ChatCompletion } from 'openai/resources';
+import { ChatCompletion } from "openai/resources";
 
 /**
  * Required to ensure JSON.stringify'd and zod.parse'd objects can be compared by property value,
  * out of order.
  */
-const FDC3InstrumentPropertySorter = (a:any,b:any) => {
-  return (
-    a.type.localeCompare(b.type) || a.id.ticker.localeCompare(b.id.ticker)
-  );
-}
+const ObjectPropertySorter = (a: any, b: any) => {
+  return a.type.localeCompare(b.type);
+};
 
 /**
  * Validates the sorted content by comparing it with a sorted mock response.
@@ -18,24 +16,26 @@ const FDC3InstrumentPropertySorter = (a:any,b:any) => {
 export const validateChatCompletion = (
   chatCompletion: ChatCompletion,
   mockChatResponseContent: string,
-  schema:Zod.ZodObject<any> | Zod.ZodArray<any>
+  schema: Zod.ZodObject<any> | Zod.ZodArray<any>,
 ): void => {
   try {
     if (chatCompletion.choices[0].message.content !== null) {
-      const parsedContent = JSON.parse(chatCompletion.choices[0].message.content);
+      const parsedContent = JSON.parse(
+        chatCompletion.choices[0].message.content,
+      );
       // Sort the parsed content array by properties
-      parsedContent.contexts.sort(FDC3InstrumentPropertySorter);
-  
+      parsedContent.contexts.sort(ObjectPropertySorter);
+
       // Sort the mockChatResponseContent array by properties for comparison
       const sortedMockContent = JSON.parse(mockChatResponseContent);
-      sortedMockContent.contexts.sort(FDC3InstrumentPropertySorter);
-  
+      sortedMockContent.contexts.sort(ObjectPropertySorter);
+
       const validatedContent = schema.parse(parsedContent);
-  
+
       // Compare the sorted arrays
       expect(validatedContent).toEqual(sortedMockContent);
-    } 
-  } catch(error) {
+    }
+  } catch (error) {
     throw error;
   }
 };

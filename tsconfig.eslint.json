@@ -1,0 +1,13 @@
+{
+  // extend your base config to share compilerOptions, etc
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // ensure that nobody can accidentally use this config for a build
+    "noEmit": true
+  },
+  "include": [
+    // whatever paths you intend to lint
+    "workspaces/**/*.ts"
+  ],
+  "exclude": ["**/node_modules", "**/eslint.config.mjs", "jest.config.ts", "*.md", "*.json" ]
+}
