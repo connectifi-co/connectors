@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "deploy": "serverless deploy --stage "
+    "deploy": "serverless deploy --stage ",
+    "undeploy": "serverless remove --stage"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

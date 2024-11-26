@@ -35,12 +35,18 @@ functions:
 
 _Note_: After deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
 
+To undeploy the stack, run the undeploy command
+
+```bash
+npm run undeploy <stagename>
+```
+
 ### Running the lambda locally
 
 You can invoke the lambdas locally by calling each by name:
 
 ```bash
-npx serverless invoke local --function polygon -p ../../data/aws/amzn-hook-event.json
+npx serverless invoke local --function polygonHook -p ../../data/aws/amzn-hook-event.json
 ```
 
 ### Running the lambda after deployment
@@ -48,7 +54,7 @@ npx serverless invoke local --function polygon -p ../../data/aws/amzn-hook-event
 After successful deployment, you can test the hook by calling the function by name:
 
 ```bash
-npx serverless invoke --function polygon -p ../../data/aws/amzn-hook-event.json
+npx serverless invoke --function polygonHook -p ../../data/aws/amzn-hook-event.json
 ```
 
 ### API Key management
