@@ -102,7 +102,7 @@ npm run data:http fdc3.instrumentList AMZN,TSLA,BBG
 
 ```
 
-### Unit and Integration tests
+## Unit and Integration tests
 
 ```bash
 npm run test
