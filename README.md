@@ -102,8 +102,7 @@ npm run data:http fdc3.instrumentList AMZN,TSLA,BBG
 
 ```
 
-### Local testing
-To run available tests locally run 
+### Unit and Integration tests
 
 ```bash
 npm run test
@@ -116,6 +115,6 @@ export CFI_OPENAI_API_KEY=<your api key>
 export CFI_OPENAI_INTEGRATION_TESTS=true # any value will work
 ```
 
-This will run the tests in `workspaces/common/actions/api/openAI/tests/openai-integration-tests.spec.ts`. You can extend or use these tests as a template for your openAI actions
+This will enable the tests in `workspaces/common/actions/api/openAI/tests/openai-integration-tests.spec.ts`. You can extend or use these tests as a template for your openAI actions
 
 
