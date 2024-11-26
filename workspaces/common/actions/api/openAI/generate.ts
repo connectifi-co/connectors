@@ -59,7 +59,7 @@ export const generate = async (apiKey: string, prompt: Prompt):Promise<Completio
 
     const chatCompletion = await openai.chat.completions.create({
         messages,
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
     });
 
     if (chatCompletion?.choices.length > 0){
