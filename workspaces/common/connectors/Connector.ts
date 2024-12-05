@@ -13,11 +13,16 @@ export interface ConnectorResponse {
   data: any;
 }
 
-
+/**
+ * Configuration settings for a connector.
+ */
 export interface ConnectorConfig {
   config: Record<string, any>;
 }
 
+/**
+ * Connector with basic properties and methods.
+ */
 export interface Connector {
   /**
    * The type of the connector.
