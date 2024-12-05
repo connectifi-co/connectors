@@ -15,12 +15,11 @@ type Constructor<T = object> = new (...args: any[]) => T;
  *                     and returns a new class that registers an instance of itself upon instantiation.
  *
  * @example
- * class MyConnector extends BaseConnector {
+ * '@registorConnector(registryInstance)`
+ * class MyConnector extends AbstraceBaseConnector {
  *   // Implementation details...
  * }
  *
- * const registry = new ConnectorRegistry();
- * const DecoratedConnector = registerConnector(registry)(MyConnector);
  */
 export function registerConnector(registry: ConnectorRegistry) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
