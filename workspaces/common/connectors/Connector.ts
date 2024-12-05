@@ -1,21 +1,64 @@
+/**
+ * Represents a response from a connector operation.
+ */
 export interface ConnectorResponse {
+  /**
+   * Indicates if the operation was successful.
+   */
   success: boolean;
+
+  /**
+   * The data returned from the operation, if any.
+   */
   data: any;
 }
+
 
 export interface ConnectorConfig {
   config: Record<string, any>;
 }
 
 export interface Connector {
+  /**
+   * The type of the connector.
+   */
   type: string;
+
+  /**
+   * The name of the connector.
+   */
   name: string;
+
+  /**
+   * Optional description of the connector.
+   */
   description?: string;
+
+  /**
+   * The configuration settings for the connector.
+   */
   config: ConnectorConfig;
+
+  /**
+   * Retrieves a configuration property by name.
+   *
+   * @param property - The name of the configuration property to retrieve.
+   * @returns The value of the configuration property, or undefined if not found.
+   */
   getConfigProperty<T>(property: string): T | undefined;
+
+  /**
+   * Initiates a connection and returns a response
+   *
+   * @returns A promise that resolves with the connector's response.
+   */
   connect: () => Promise<ConnectorResponse>;
 }
 
+/**
+ * An abstract base class for connectors, providing common functionality.
+ * Extend this class to create concrete connector implementations.
+ */
 export abstract class AbstractBaseConnector implements Connector {
   type: string;
   name: string;
@@ -34,6 +77,12 @@ export abstract class AbstractBaseConnector implements Connector {
     this.description = description;
   }
 
+  /**
+   * Retrieves a configuration property by name.
+   *
+   * @param property - The name of the configuration property to retrieve.
+   * @returns The value of the configuration property, or undefined if not found.
+   */
   getConfigProperty<T>(property: string): T | undefined {
     return this.config.config[property] as T | undefined;
   }

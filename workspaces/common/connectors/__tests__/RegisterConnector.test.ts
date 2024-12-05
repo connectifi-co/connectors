@@ -11,8 +11,6 @@ describe("@RegisterConnector", () => {
 
   @registerConnector(registry)
   class TestConnector extends AbstractBaseConnector {
-    type = "test";
-    name = "testConnector";
 
     constructor(type: string, name: string, config: ConnectorConfig) {
       super(type, name, config);
