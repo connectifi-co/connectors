@@ -3,6 +3,7 @@ import { ConnectorRegistry } from "../ConnectorRegistry";
 import {
   AbstractBaseConnector,
   ConnectorConfig,
+  ConnectorRequest,
   ConnectorResponse,
 } from "../Connector";
 
@@ -16,11 +17,11 @@ describe("@RegisterConnector", () => {
       super(type, name, config);
     }
 
-    connect = async (): Promise<ConnectorResponse> => {
+    async connect(request:ConnectorRequest): Promise<ConnectorResponse> {
       console.log(
-        `${this.type} connect() called, with ${JSON.stringify(this.config)}`
+        `${this.type} connect() called, with ${JSON.stringify(request)}`
       );
-      return { success: true, data: { type: "cft.test" } };
+      return { success: true, response: { type: "cft.test" } };
     };
   }
 

@@ -1,5 +1,15 @@
+import { Context } from "@finos/fdc3";
+
 /**
- * Represents a response from a connector operation.
+ * A connector request that requires at least one fdc3 context
+ */
+export interface ConnectorRequest {
+  context: Context;
+  params: object;
+}
+
+/**
+ * A response from a connector operation.
  */
 export interface ConnectorResponse {
   /**
@@ -10,14 +20,14 @@ export interface ConnectorResponse {
   /**
    * The data returned from the operation, if any.
    */
-  data: any;
+  response: any;
 }
 
 /**
  * Configuration settings for a connector.
  */
 export interface ConnectorConfig {
-  config: Record<string, any>;
+  [key: string]: any;
 }
 
 /**
@@ -45,19 +55,12 @@ export interface Connector {
   config: ConnectorConfig;
 
   /**
-   * Retrieves a configuration property by name.
-   *
-   * @param property - The name of the configuration property to retrieve.
-   * @returns The value of the configuration property, or undefined if not found.
-   */
-  getConfigProperty<T>(property: string): T | undefined;
-
-  /**
    * Initiates a connection and returns a response
    *
+   * @param ConnectorRequest - A request, must contain at least one FDC3 context
    * @returns A promise that resolves with the connector's response.
    */
-  connect: () => Promise<ConnectorResponse>;
+  connect(request: ConnectorRequest):Promise<ConnectorResponse>;
 }
 
 /**
@@ -82,15 +85,5 @@ export abstract class AbstractBaseConnector implements Connector {
     this.description = description;
   }
 
-  /**
-   * Retrieves a configuration property by name.
-   *
-   * @param property - The name of the configuration property to retrieve.
-   * @returns The value of the configuration property, or undefined if not found.
-   */
-  getConfigProperty<T>(property: string): T | undefined {
-    return this.config.config[property] as T | undefined;
-  }
-
-  connect: () => Promise<ConnectorResponse>;
+  abstract connect(request:ConnectorRequest): Promise<ConnectorResponse>
 }

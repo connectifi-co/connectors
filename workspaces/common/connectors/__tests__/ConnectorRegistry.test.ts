@@ -2,8 +2,10 @@ import { ConnectorRegistry } from "../ConnectorRegistry";
 import {
   AbstractBaseConnector,
   ConnectorConfig,
+  ConnectorRequest,
   ConnectorResponse,
 } from "../Connector";
+import { Context } from "@finos/fdc3";
 
 class TestConnector extends AbstractBaseConnector {
   constructor(
@@ -15,11 +17,11 @@ class TestConnector extends AbstractBaseConnector {
     super(type, name, config, description);
   }
 
-  connect = async (): Promise<ConnectorResponse> => {
+  connect = async (request:ConnectorRequest): Promise<ConnectorResponse> => {
     console.log(
-      `${this.type}-${this.name} connect() called with ${JSON.stringify(this.config)}`
+      `${this.type}-${this.name} connect() called with ${JSON.stringify(request)}`
     );
-    return { success: true, data: { type: "fdc3.intrument" } };
+    return { success: true, response: { type: "fdc3.intrument" } };
   };
 }
 
@@ -28,7 +30,7 @@ describe("ConnectorRegistry tests", () => {
 
   beforeEach(() => {
     registry = ConnectorRegistry.getInstance();
-    registry["registry"].clear(); 
+    registry["registry"].clear();
   });
 
   it("should register a connector successfully", () => {
@@ -46,7 +48,7 @@ describe("ConnectorRegistry tests", () => {
     const testConnector = new TestConnector(
       "cfi.testConnector",
       "testConnector",
-      { config: { apiKey: "cfi-23434" } }
+      { apiKey: "cfi-23434" }
     );
     registry.register(testConnector);
     expect(() => registry.register(testConnector)).toThrow(
@@ -70,7 +72,7 @@ describe("ConnectorRegistry tests", () => {
 
   it("should throw an error when registering a connector with null name", () => {
     const testConnector = new TestConnector("cfi.testConnector", null as any, {
-      config: { apiKey: "cfi-23434" },
+      apiKey: "cfi-23434",
     });
     expect(() => registry.register(testConnector)).toThrow(
       "Connector Error: connector.name is null or undefined"
@@ -81,7 +83,7 @@ describe("ConnectorRegistry tests", () => {
     const testConnector = new TestConnector(
       "cfi.testConnector",
       undefined as any,
-      { config: { apiKey: "cfi-23434" } }
+      { apiKey: "cfi-23434" }
     );
     expect(() => registry.register(testConnector)).toThrow(
       "Connector Error: connector.name is null or undefined"
@@ -90,7 +92,7 @@ describe("ConnectorRegistry tests", () => {
 
   it("should throw an error when registering a connector with an empty string type", () => {
     const testConnector = new TestConnector("", "testConnector", {
-      config: { apiKey: "cfi-23434" },
+      apiKey: "cfi-23434",
     });
     expect(() => registry.register(testConnector)).toThrow(
       "Connector Error: connector.type is empty."
