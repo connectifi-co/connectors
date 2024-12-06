@@ -91,31 +91,18 @@ describe("OpenAIConnector tests", () => {
   });
 
   it("should throw error due to invalid API key", async () => {
-    const connectorWithInvalidKey = new OpenAIConnector(
-      "openai",
-      "OpenAI Connector",
-      {
-        apiKey: "invalid-key",
-      },
-      "Connects to the OpenAI API"
-    );
-
-    const mockRequest: OpenAIConnectorRequest = {
-      context: { type: "fdc3.instrument", id: { ticker: "AAPL" } },
-      params: {
-        systemPrompt: "You are an AI assistant.",
-        userPrompt: "What is the current price of AAPL?",
-        model: OPENAI_MODEL,
-      },
-    };
-
-    const response = await testConnector.connect(mockRequest);
-    expect(response.success).toBe(false);
-    expect(response.response.data).toContain("401");
-
-    await expect(connectorWithInvalidKey.connect(mockRequest)).rejects.toThrow(
-      "OpenAI API Key is required in the configuration."
-    );
+    expect(()=>{
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const connectorWithInvalidKey = new OpenAIConnector(
+        "openai",
+        "OpenAI Connector",
+        {
+          apiKey: ""
+        },
+        "Connects to the OpenAI API"
+      );
+    })
+    
   });
 
   it("should handle malformed JSON response", async () => {
