@@ -76,7 +76,7 @@ describe("OpenAIConnector tests", () => {
     expect(response.response.items.length).toBe(2);
   });
 
-  it("should throw error due to missing context data", async () => {
+  it("should handle error due to missing context data", async () => {
     const mockRequest: OpenAIConnectorRequest = {
       context: null,
       params: {
@@ -90,7 +90,7 @@ describe("OpenAIConnector tests", () => {
     );
   });
 
-  it("should throw error due to invalid API key", async () => {
+  it("should throw ctor error due to invalid API key", async () => {
     expect(()=>{
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const connectorWithInvalidKey = new OpenAIConnector(
@@ -101,7 +101,7 @@ describe("OpenAIConnector tests", () => {
         },
         "Connects to the OpenAI API"
       );
-    })
+    }).toThrow();
     
   });
 

@@ -7,10 +7,9 @@ import {
 } from "../Connector";
 import OpenAI from "openai";
 
-
+// This is the standard way to implement
 export class OpenAIConnectorConfig implements ConnectorConfig {
   apiKey: string;
-  mockOpenAISDK?: any;
 }
 
 export class OpenAIConnectorRequest implements ConnectorRequest {
@@ -40,15 +39,16 @@ export class OpenAIConnector extends AbstractBaseConnector {
     this.openAI = this.config.mockOpenAISDK ? this.config.mockOpenAISDK : new OpenAI({ apiKey });
   }
   
-  //this is quick and dirty port of the 'findSimilar' openAI call - needs work to be generic
+  //this is quick and dirty port of the 'findSimilar' openAI action - needs work to be generic
   async connect(request: OpenAIConnectorRequest): Promise<ConnectorResponse> {
     if (!request.context) {
       throw new Error("OpenAI Connector Error: Missing Context Data")
     }
     const context = request.context;
     const systemPrompt = request.params.systemPrompt;
-    const tmpUserPrompt = request.params.userPrompt;
 
+    //FIXME: this is specific to the context/prompt building logic for findSimilar
+    const tmpUserPrompt = request.params.userPrompt;
     const userPrompt = tmpUserPrompt
     ? `${tmpUserPrompt}\n${JSON.stringify(context)}`
     : `Context: ${JSON.stringify(context)}`;
@@ -65,6 +65,7 @@ export class OpenAIConnector extends AbstractBaseConnector {
         model: request.params.model,
       });
 
+      //FIXME: this needs a rethink as well
       if (chatCompletion?.choices.length > 0) {
         const itemsContent = chatCompletion?.choices[0].message.content;
         if (itemsContent) {
