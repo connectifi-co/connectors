@@ -1,7 +1,7 @@
 import { type Context, ContextTypes, type Instrument } from '@finos/fdc3';
 import type { DeliveryHookHandler } from '@connectifi/sdk';
-import { OPENFIGI_TICKER_INFO_URL } from '../lib/constants';
-import { RequestError, ServerError } from '../lib/types';
+import { OPENFIGI_TICKER_INFO_URL } from '../constants';
+import { RequestError, ServerError } from '../types';
 
 const apiKey = process.env.OPENFIGI_API_KEY;
 

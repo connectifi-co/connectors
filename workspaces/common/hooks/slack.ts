@@ -1,7 +1,7 @@
 import { type Contact, type Context, ContextTypes } from '@finos/fdc3';
 import type { DeliveryHookHandler } from '@connectifi/sdk';
-import { SLACK_USER_LOOKUP_URL } from '../lib/constants';
-import { RequestError, ServerError } from '../lib/types';
+import { SLACK_USER_LOOKUP_URL } from '../constants';
+import { RequestError, ServerError } from '../types';
 
 const apiKey = process.env.SLACK_API_KEY;
 

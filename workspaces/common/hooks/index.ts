@@ -1,7 +1,7 @@
 import type { DeliveryHookHandler } from '@connectifi/sdk';
 
 import { openFIGIHook } from './openfigi';
-import { polygonHook } from './polygonIO';
+import { polygonHook } from './polygon';
 import { slackHook } from './slack';
 
 const DeliveryHooksMap = () => {
