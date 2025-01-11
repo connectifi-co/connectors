@@ -1,9 +1,9 @@
 import type { LinkActionHandler } from '../types';
 
-import { teamsLink } from './links/teamsLink';
-import { mapLink } from './links/mapLink';
-// import { locationLink, companyHQLink } from './links/maps';
-import { emailLink } from './links/emailLink';
+import { teamsLink } from './links/teams';
+import { mapLink } from './links/maps';
+import { companyHQLink } from './links/polygonIO/companyMap';
+import { emailLink } from './links/email';
 // import { slackLink } from './links/slackLink';
 
 const ActionsMap = () => {
@@ -18,8 +18,9 @@ const ActionsMap = () => {
 
 const actions = ActionsMap();
 actions.addHandler('emailLink', emailLink);
-actions.addHandler('mapLink', mapLink);
-// actions.addHandler('slackLink', teamsLink);
+actions.addHandler('companyHQLink', companyHQLink);
+actions.addHandler('locationLink', mapLink);
+// actions.addHandler('slackLink', slackLink);
 actions.addHandler('teamsLink', teamsLink);
 
 export const actionsMap = actions;

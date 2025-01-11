@@ -1,4 +1,5 @@
 import { ContextTypes, LinkActionHandler, type Location, RequestError } from '../../types';
+import { cleanPostalCode } from '../../utils';
 
 export const mapLink: LinkActionHandler = async (params) => {
   const { context } = { ...params };
@@ -19,12 +20,4 @@ export const mapLink: LinkActionHandler = async (params) => {
     url = `https://www.google.com/maps/search/?api=1&query=${query}`;
   }
   return { url };
-};
-
-const cleanPostalCode = (code: string): string => {
-  if (code) {
-    const codeSplit = code.split('-');
-    return codeSplit[0];
-  }
-  return code;
 };

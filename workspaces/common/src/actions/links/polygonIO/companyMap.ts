@@ -1,24 +1,20 @@
 import { ContextTypes } from '@finos/fdc3';
 import { getTickerInfo } from '../../../polygon';
-import { createResponse } from '../../../utils';
-import { ActionHandler } from '../../../types';
+import { LinkActionHandler, RequestError, ServerError } from '../../../types';
+import { cleanPostalCode } from '../../../utils';
 
-const cleanPostalCode = (code: string): string => {
-  if (code) {
-    const codeSplit = code.split('-');
-    return codeSplit[0];
-  }
-  return code;
-};
+const apiKey = process.env.POLYGON_API_KEY;
 
-export const companyHQ: ActionHandler = async (params) => {
-  const { context, keys } = { ...params };
-  const apiKey = keys?.['apiKey'];
+export const companyHQLink: LinkActionHandler = async (request) => {
   if (!apiKey) {
-    return createResponse(400, {
-      message: 'api key not found',
-    });
+    throw new ServerError('polygon api key missing');
   }
+
+  const { context } = request;
+  if (context.type !== ContextTypes.Instrument) {
+    throw new RequestError('context type not supported');
+  }
+
   if (context.type === ContextTypes.Instrument) {
     const newCtx = await getTickerInfo(apiKey, context.id?.ticker);
     let url = '';
@@ -32,11 +28,6 @@ export const companyHQ: ActionHandler = async (params) => {
       url = 'https://maps.google.com';
     }
     console.log(`url result: ${url}`);
-
-    return createResponse(200, { url });
+    return { url };
   }
-
-  return createResponse(400, {
-    message: 'bad context type',
-  });
 };
