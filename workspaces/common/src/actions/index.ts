@@ -1,4 +1,4 @@
-import type { ActionHandler } from '../types';
+import type { LinkActionHandler } from '../types';
 
 import { teamsLink } from './links/teamsLink';
 import { mapLink } from './links/mapLink';
@@ -7,10 +7,10 @@ import { emailLink } from './links/emailLink';
 // import { slackLink } from './links/slackLink';
 
 const ActionsMap = () => {
-  const actions: Map<string, ActionHandler> = new Map();
+  const actions: Map<string, LinkActionHandler> = new Map();
 
   return {
-    addHandler: (name: string, dh: ActionHandler) =>
+    addHandler: (name: string, dh: LinkActionHandler) =>
       actions.set(name, dh),
     getHandler: (name: string) => actions.get(name),
   };
