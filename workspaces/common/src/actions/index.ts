@@ -2,7 +2,7 @@ import type { LinkActionHandler } from '../types';
 
 import { teamsLink } from './links/teams';
 import { mapLink } from './links/maps';
-import { companyHQLink } from './links/polygonIO/companyMap';
+import { companyHQLink } from './links/polygon';
 import { emailLink } from './links/email';
 // import { slackLink } from './links/slackLink';
 
