@@ -1,6 +1,5 @@
-import { Location } from '../../types';
+import { ActionHandler, Location } from '../../types';
 import { createResponse } from '../../utils';
-import { ActionHandler } from '../../types';
 
 const cleanPostalCode = (code: string): string => {
   if (code) {

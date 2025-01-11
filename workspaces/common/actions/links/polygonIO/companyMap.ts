@@ -1,7 +1,7 @@
 import { ContextTypes } from '@finos/fdc3';
-import { getTickerInfo } from '../../../lib/polygon';
-import { createResponse } from '../../../lib/utils';
-import { ActionHandler } from '../../../lib/types';
+import { getTickerInfo } from '../../../polygon';
+import { createResponse } from '../../../utils';
+import { ActionHandler } from '../../../types';
 
 const cleanPostalCode = (code: string): string => {
   if (code) {
