@@ -23,9 +23,11 @@
     ]
   },
   "destinations": [
-    "destAppOne",
-    "destAppTwo",
-    "destAppThree"
+    { "appId": "destAppOne" },
+    { "appId": "destAppTwo" },
+    { "appId": "destAppThree" }
   ],
-  "source": "sourceApp"
+  "source": {
+    "appId": "sourceApp"
+  }
 }

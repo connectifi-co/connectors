@@ -1,0 +1,16 @@
+{
+  "context": {
+    "type": "fdc3.contact",
+    "id": {
+      "email": "brian@connectifi.co"
+    }
+  },
+  "destinations": [
+    { "appId": "destAppOne" },
+    { "appId": "destAppTwo" },
+    { "appId": "destAppThree" }
+  ],
+  "source": {
+    "appId": "sourceApp"
+  }
+}

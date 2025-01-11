@@ -1,0 +1,33 @@
+{
+  "context": {
+    "type": "fdc3.contactList",
+    "contacts": [
+      {
+        "type": "fdc3.contact",
+        "id": {
+          "email": "brian@connectifi.co"
+        }
+      },
+      {
+        "type": "fdc3.contact",
+        "id": {
+          "email": "nick@connectifi.co"
+        }
+      },
+      {
+        "type": "fdc3.contact",
+        "id": {
+          "email": "kevin@connectifi.co"
+        }
+      }
+    ]
+  },
+  "destinations": [
+    { "appId": "destAppOne" },
+    { "appId": "destAppTwo" },
+    { "appId": "destAppThree" }
+  ],
+  "source": {
+    "appId": "sourceApp"
+  }
+}
