@@ -2,7 +2,11 @@ import type { Instrument, InstrumentList } from '@finos/fdc3';
 import type { DeliveryHookHandler } from '@connectifi/sdk';
 import { ContextTypes } from '@finos/fdc3';
 import { RequestError, ServerError } from '../lib/types';
-import { getExchangeAcronym, getExchangeName, getTickerInfo } from '../lib/polygon';
+import {
+  getExchangeAcronym,
+  getExchangeName,
+  getTickerInfo,
+} from '../lib/polygon';
 
 const apiKey = process.env.POLYGON_API_KEY;
 
