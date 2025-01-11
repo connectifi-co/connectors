@@ -39,7 +39,10 @@ const mapTickerDetails = (details: any): CompanyDetails => {
   return result;
 };
 
-export async function getDetails(apiKey: string, context: Context): Promise<CompanyDetails> {
+export async function getDetails(
+  apiKey: string,
+  context: Context,
+): Promise<CompanyDetails> {
   const ticker: string = context.id?.ticker as string;
   if (ticker) {
     const result = await getTickerInfo(apiKey, ticker);
@@ -102,13 +105,18 @@ const loadExchangeData = async (apiKey: string) => {
   }
 };
 
-export const getExchangeName = async (apiKey: string, mic: string): Promise<any> => {
+export const getExchangeName = async (
+  apiKey: string,
+  mic: string,
+): Promise<any> => {
   if (!exchangeData) {
     await loadExchangeData(apiKey);
   }
   if (exchangeData) {
     return exchangeData.find((ex: any) => {
-      return ex.type === 'exchange' && ex.mic === ex.operating_mic && ex.mic === mic;
+      return (
+        ex.type === 'exchange' && ex.mic === ex.operating_mic && ex.mic === mic
+      );
     });
   }
   return undefined;
@@ -140,5 +148,3 @@ const getTickerInfo = async (apiKey: string, ticker: string): Promise<any> => {
   }
   return undefined;
 };
-
-

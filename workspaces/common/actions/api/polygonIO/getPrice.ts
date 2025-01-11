@@ -5,7 +5,10 @@ const POLYGON_HOST = 'https://api.polygon.io';
 const POLYGON_SNAPSHOT_URL = `${POLYGON_HOST}/v2/snapshot/locale/us/markets/stocks/tickers`;
 export const POLYGON_TICKER_INFO_URL = `${POLYGON_HOST}/v3/reference/tickers`;
 
-export async function getPrice(apiKey: string, context: Context): Promise<InstrumentPrice> {
+export async function getPrice(
+  apiKey: string,
+  context: Context,
+): Promise<InstrumentPrice> {
   const ticker: string = context.id?.ticker as string;
   if (!ticker) {
     return {
@@ -28,7 +31,8 @@ export async function getPrice(apiKey: string, context: Context): Promise<Instru
     method: 'GET',
   });
   const json: any = await resp.json();
-  const price = json.ticker.min.c !== 0 ? json.ticker.min.c : json.ticker.prevDay.c;
+  const price =
+    json.ticker.min.c !== 0 ? json.ticker.min.c : json.ticker.prevDay.c;
   return {
     type: 'connect.instrumentPrice',
     id: {
@@ -38,6 +42,3 @@ export async function getPrice(apiKey: string, context: Context): Promise<Instru
     price: price,
   };
 }
-
-
-

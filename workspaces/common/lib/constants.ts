@@ -10,9 +10,10 @@ export const POLYGON_EXCHANGE_INFO_URL = `${POLYGON_HOST}/v3/reference/exchanges
 
 export const POLYGON_PRICE_HISTORY_URL = `${POLYGON_HOST}/v2/aggs/ticker`;
 
-export const SLACK_USER_LOOKUP_URL = 'https://slack.com/api/users.lookupByEmail?email='
+export const SLACK_USER_LOOKUP_URL =
+  'https://slack.com/api/users.lookupByEmail?email=';
 
-export const EXATE_HOST = "https://api.exate.co";
+export const EXATE_HOST = 'https://api.exate.co';
 
 export const EXATE_ID_URL = `${EXATE_HOST}/apigator/identity/v1/token`;
 

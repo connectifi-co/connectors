@@ -1,10 +1,17 @@
 import type { Instrument } from '@finos/fdc3';
-import { getExchangeAcronym, getExchangeName, getTickerInfo } from '../../lib/polygon';
+import {
+  getExchangeAcronym,
+  getExchangeName,
+  getTickerInfo,
+} from '../../lib/polygon';
 
 const POLYGON_HOST = 'https://api.polygon.io';
 export const POLYGON_TICKER_INFO_URL = `${POLYGON_HOST}/v3/reference/tickers`;
 
-export const enhanceInstrument = async (apiKey: string, context: Instrument): Promise<Instrument> => {
+export const enhanceInstrument = async (
+  apiKey: string,
+  context: Instrument,
+): Promise<Instrument> => {
   const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker || '');
   if (tickerInfo) {
     const newContext: Instrument = { ...context };

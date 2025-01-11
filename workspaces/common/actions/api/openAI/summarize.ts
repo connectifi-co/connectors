@@ -1,14 +1,14 @@
 import type { Context } from '@finos/fdc3';
 import { Summary } from '../../../lib/types';
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
 const contextDescriptors = [
-    `Context type of 'fdc3.instrument' describes a stock or other financial instrument.  The 'id' property lists common identifiers for the instrument such as 'ticker'.`,
-    `Context type of 'fdc3.contact' describes a person or contact - typically from a CRM or similar system.  The 'id' property lists common identifiers for the contact such as 'email'.`,
+  `Context type of 'fdc3.instrument' describes a stock or other financial instrument.  The 'id' property lists common identifiers for the instrument such as 'ticker'.`,
+  `Context type of 'fdc3.contact' describes a person or contact - typically from a CRM or similar system.  The 'id' property lists common identifiers for the contact such as 'email'.`,
 ];
 
 const createSystemPrompt = (): string => {
-    return `You will be provided with a an FDC3 context data object.  You will generate a summary of the entity it describes.  
+  return `You will be provided with a an FDC3 context data object.  You will generate a summary of the entity it describes.  
     For example: 
         If the context data is describing a company, provide a summary of the company.  
         If the context data is describing a country, provide a summary of the country.
@@ -19,7 +19,7 @@ const createSystemPrompt = (): string => {
 };
 
 const contextToPrompt = (context: Context): string => {
-    return `
+  return `
     The FDC3 context data is as follows:
     ${JSON.stringify(context)}
     `;
@@ -36,37 +36,38 @@ const dataReturnPrompt = `
     "
 `;
 
-export const summarize = async (apiKey: string, context: Context):Promise<Summary> => {
-   
-    const openai = new OpenAI({
-        apiKey: apiKey,
-    });
+export const summarize = async (
+  apiKey: string,
+  context: Context,
+): Promise<Summary> => {
+  const openai = new OpenAI({
+    apiKey: apiKey,
+  });
 
-    const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
-    messages.push({ role: "system", content: createSystemPrompt()});
-    messages.push({ role: "user", content: contextToPrompt(context)});
-    messages.push({ role: "user", content: dataReturnPrompt});
+  const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> =
+    [];
+  messages.push({ role: 'system', content: createSystemPrompt() });
+  messages.push({ role: 'user', content: contextToPrompt(context) });
+  messages.push({ role: 'user', content: dataReturnPrompt });
 
-    const chatCompletion = await openai.chat.completions.create({
-        messages,
-        model: "gpt-4o-mini",
-    });
+  const chatCompletion = await openai.chat.completions.create({
+    messages,
+    model: 'gpt-4o-mini',
+  });
 
-    if (chatCompletion?.choices.length > 0){
-        const message = chatCompletion.choices[0].message.content;
-        if (message) {
-            const summary: Summary = JSON.parse(message);
-            if (summary){
-                return summary;
-            }
-        }
-       
+  if (chatCompletion?.choices.length > 0) {
+    const message = chatCompletion.choices[0].message.content;
+    if (message) {
+      const summary: Summary = JSON.parse(message);
+      if (summary) {
+        return summary;
+      }
     }
-    
-    return {
-        type:'connect.summary',
-        title: 'Error',
-        text: 'Summary could not be generated'
-    }
-}
+  }
 
+  return {
+    type: 'connect.summary',
+    title: 'Error',
+    text: 'Summary could not be generated',
+  };
+};

@@ -1,25 +1,26 @@
 import type { Context } from '@finos/fdc3';
 
 export interface HTTPResponse {
-    statusCode: number;
-    headers: any;
-    body: string;
+  statusCode: number;
+  headers: any;
+  body: string;
 }
 
 export interface HookHandlerParams {
   context: Context;
   destinations: Array<string>;
-  keys?: {[key: string]: string};
+  keys?: { [key: string]: string };
 }
 
-export type DeliveryHookHandler = (params: HookHandlerParams) => Promise<HTTPResponse>
+export type DeliveryHookHandler = (
+  params: HookHandlerParams,
+) => Promise<HTTPResponse>;
 
 export interface DeliveryHookRequest {
   context: Context;
   source: string;
   destinations: string[];
 }
-
 
 export interface ActionRequest {
   context: Context;
@@ -31,10 +32,12 @@ export interface ActionRequest {
 export interface ActionHandlerParams {
   context: Context;
   intent?: string;
-  keys?: {[key: string]: string};
+  keys?: { [key: string]: string };
 }
 
-export type ActionHandler = (params: ActionHandlerParams) => Promise<HTTPResponse>
+export type ActionHandler = (
+  params: ActionHandlerParams,
+) => Promise<HTTPResponse>;
 
 export interface DeliveryHookResponse {
   changes: Array<HookChangeResponse>;
@@ -115,7 +118,7 @@ export interface InstrumentPrice extends Context {
 }
 
 export interface Location extends Context {
-  type:'connect.location';
+  type: 'connect.location';
   name: string;
   id: {
     geo?: {
@@ -129,8 +132,8 @@ export interface Location extends Context {
       province?: string;
       country?: string;
       code?: string;
-    }
-  }
+    };
+  };
 }
 
 export interface Link extends Context {
@@ -142,8 +145,8 @@ export interface Link extends Context {
 }
 
 export interface Query extends Context {
-	type: 'connect.query';
-	name: string;
-	text: string;
-	modifiers?: {[key: string]: string};
+  type: 'connect.query';
+  name: string;
+  text: string;
+  modifiers?: { [key: string]: string };
 }

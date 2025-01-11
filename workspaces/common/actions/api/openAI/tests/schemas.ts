@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const FDC3ContextSchema = z.object({
   type: z.string(),

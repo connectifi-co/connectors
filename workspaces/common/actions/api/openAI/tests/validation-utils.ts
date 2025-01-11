@@ -1,4 +1,4 @@
-import { ChatCompletion } from "openai/resources";
+import { ChatCompletion } from 'openai/resources';
 
 /**
  * Required to ensure JSON.stringify'd and zod.parse'd objects can be compared by property value,
@@ -16,7 +16,7 @@ const ObjectPropertySorter = (a: any, b: any) => {
 export const validateChatCompletion = (
   chatCompletion: ChatCompletion,
   mockChatResponseContent: string,
-  schema: Zod.ZodObject<any> | Zod.ZodArray<any>
+  schema: Zod.ZodObject<any> | Zod.ZodArray<any>,
 ): void => {
   if (chatCompletion.choices[0].message.content !== null) {
     const parsedContent = JSON.parse(chatCompletion.choices[0].message.content);
