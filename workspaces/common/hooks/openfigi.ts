@@ -19,7 +19,7 @@ export const addFIGIToInstrument = async (apiKey: string, context:Instrument):Pr
     if (res.ok) {
       const newContext:Instrument = {...context};
       const resJson:any = await res.json();
-      const data = resJson.data && resJson.data.length && resJson.data[0];
+      const data = resJson.data?.[0];
       console.log('figi response', {resJson, data})
       if (data) {
         newContext.id.FIGI = data.figi;
@@ -40,7 +40,7 @@ export const addFIGIToInstrument = async (apiKey: string, context:Instrument):Pr
 
 export const openFIGIHook: DeliveryHookHandler = async (params) => {
   const {keys, context, destinations} = {...params};
-  const apiKey = keys && keys['apiKey'];
+  const apiKey = keys?.['apiKey'];
   if (! apiKey){
     return createResponse(400, {
       message: 'no api key provided'

@@ -1,4 +1,4 @@
-import type { Context as FDC3Context, Instrument, InstrumentList } from '@finos/fdc3';
+import type { Instrument, InstrumentList } from '@finos/fdc3';
 import { ContextTypes } from '@finos/fdc3';
 import { createResponse } from '../../lib/utils';
 import { enhanceInstrument } from './enhanceInstrument';
@@ -6,7 +6,7 @@ import { DeliveryHookHandler } from '../../lib/types';
 
 export const polygonHook: DeliveryHookHandler = async (params) => {
     const {keys, context, destinations} = { ...params};
-    const apiKey = keys && keys['apiKey'];
+    const apiKey = keys?.['apiKey'];
     if (!apiKey){
       return createResponse(400, {
         message: 'api key not provided'

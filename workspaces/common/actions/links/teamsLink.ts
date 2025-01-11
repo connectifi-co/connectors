@@ -27,14 +27,14 @@ const handleInitSettings = (context: Context) : HTTPResponse => {
   const settings = context as ChatInitSettings;
   let emails = '';
   if (settings.members){
-    emails = getEmailList(settings.members as ContactList);
+    emails = getEmailList(settings.members);
   }
-  const message = settings.message as Message;
+  const message = settings.message;
   let body = '';
   if (message?.text['text/html']){
     body = encodeURIComponent(message.text['text/html']);
   }
-  else if (message?.text['text\/plain']){
+  else if (message?.text['text/plain']){
     body = message.text['text/plain'];
   }
   console.log('handleInitSettings!', body);
@@ -49,7 +49,7 @@ const handleContactList = (context: ContactList) : HTTPResponse => {
 }
 
 export const teamsLink: ActionHandler = async (params) => {
-  const { context, intent } = {...params};
+  const { context } = {...params};
     if (context.type === "fdc3.contact"){
       const url = `https://teams.microsoft.com/l/chat/0/0?users=${(context as Contact).id.email}`;
       return createResponse(200, {url});

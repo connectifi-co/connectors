@@ -39,7 +39,7 @@ const enahanceContact = async (apiKey: string, context:Contact):Promise<FDC3Cont
 
 export const slackHook: DeliveryHookHandler = async (params) => {
   const {keys, context, destinations} = {...params};
-  const apiKey = keys && keys['apiKey'];
+  const apiKey = keys?.['apiKey'];
   if (! apiKey){
     return createResponse(400, {
       message: 'no api key provided',

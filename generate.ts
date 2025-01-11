@@ -63,10 +63,9 @@ if (provider && contextType && contextKeys) {
       };
       break;
     case 'fdc3.instrumentList' :
-      const tickers = contextKeys.split(',');
       payload = {
         type: contextType,
-        instruments: tickers.map(ticker => ({
+        instruments: contextKeys.split(',').map(ticker => ({
           type: 'fdc3.instrument',
           id: {
             ticker,
@@ -83,10 +82,9 @@ if (provider && contextType && contextKeys) {
       };
       break;
     case 'fdc3.contactList' :
-      const contacts = contextKeys.split(',');
       payload = {
         type: contextType,
-        contacts: contacts.map(email => ({
+        contacts: contextKeys.split(',').map(email => ({
           type: 'fdc3.contact',
           id: {
             email,

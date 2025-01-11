@@ -1,8 +1,8 @@
-import type { Context as Context } from '@finos/fdc3';
+import type { Context } from '@finos/fdc3';
 
 export interface HTTPResponse {
     statusCode: number;
-    headers: {};
+    headers: any;
     body: string;
 }
 
@@ -12,7 +12,7 @@ export interface HookHandlerParams {
   keys?: {[key: string]: string};
 }
 
-export interface DeliveryHookHandler {(params: HookHandlerParams): Promise<HTTPResponse>}
+export type DeliveryHookHandler = (params: HookHandlerParams) => Promise<HTTPResponse>
 
 export interface DeliveryHookRequest {
   context: Context;
@@ -34,7 +34,7 @@ export interface ActionHandlerParams {
   keys?: {[key: string]: string};
 }
 
-export interface ActionHandler {(params: ActionHandlerParams): Promise<HTTPResponse>}
+export type ActionHandler = (params: ActionHandlerParams) => Promise<HTTPResponse>
 
 export interface DeliveryHookResponse {
   changes: Array<HookChangeResponse>;

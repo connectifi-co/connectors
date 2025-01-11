@@ -38,7 +38,6 @@ const dataReturnPrompt = `
 
 export const summarize = async (apiKey: string, context: Context):Promise<Summary> => {
    
-    let items: Array<Context> = [];
     const openai = new OpenAI({
         apiKey: apiKey,
     });
