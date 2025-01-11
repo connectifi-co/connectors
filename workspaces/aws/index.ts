@@ -1,8 +1,7 @@
 import { createResponse } from '../common/lib/utils';
 
-export async function handler(event: any) {
+export async function handler() {
   return createResponse(200, {
-    message: 'Connectifi Hooks!',
-    input: event,
+    status: 'OK',
   });
 }

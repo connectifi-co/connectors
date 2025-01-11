@@ -1,13 +1,29 @@
-import type { Context as FDC3Context, Contact } from '@finos/fdc3';
-import { ContextTypes } from '@finos/fdc3';
+import { type Contact, type Context, ContextTypes } from '@finos/fdc3';
+import type { DeliveryHookHandler } from '@connectifi/sdk';
 import { SLACK_USER_LOOKUP_URL } from '../lib/constants';
-import { createResponse } from '../lib/utils';
-import { DeliveryHookHandler } from '../lib/types';
+import { RequestError, ServerError } from '../lib/types';
 
+const apiKey = process.env.SLACK_API_KEY;
+
+export const slackHook: DeliveryHookHandler = async (request) => {
+  if (!apiKey) {
+    throw new ServerError('slack api key missing');
+  }
+
+  const { context } = request;
+  if (context.type !== ContextTypes.Contact) {
+    throw new RequestError('context type not supported');
+  }
+
+  const newCtx = await enahanceContact(apiKey, context as Contact);
+  return { context: newCtx };
+};
+
+// TODO revisit this - doesn't really make sense as a delivery hook
 const enahanceContact = async (
   apiKey: string,
   context: Contact,
-): Promise<FDC3Context> => {
+): Promise<Context> => {
   const email = context.id.email;
 
   const apiURL = SLACK_USER_LOOKUP_URL + email;
@@ -27,6 +43,7 @@ const enahanceContact = async (
       if (resJson.ok && resJson.user) {
         newContext.id.slackUserId = resJson.user.id;
         newContext.id.slackTeamId = resJson.user.team_id;
+        newContext.id.slackUrl = `slack://user?team=${resJson.user.team_id}&id=${resJson.user.id}`;
       }
       return newContext;
     } else {
@@ -41,27 +58,4 @@ const enahanceContact = async (
     console.error('error calling slack API', { err: e });
   }
   return context;
-};
-
-export const slackHook: DeliveryHookHandler = async (params) => {
-  const { keys, context, destinations } = { ...params };
-  const apiKey = keys?.['apiKey'];
-  if (!apiKey) {
-    return createResponse(400, {
-      message: 'no api key provided',
-    });
-  }
-  if (context.type === ContextTypes.Contact) {
-    const newCtx = await enahanceContact(apiKey, context as Contact);
-    const changes = destinations.map((destination) => ({
-      destination,
-      context: newCtx,
-    }));
-
-    return createResponse(200, { changes });
-  }
-
-  return createResponse(400, {
-    message: 'bad context type',
-  });
 };

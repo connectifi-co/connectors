@@ -1,9 +1,9 @@
 import type { Context } from '@finos/fdc3';
 import { CompanyDetails } from '../../../lib/types';
-
-const POLYGON_HOST = 'https://api.polygon.io';
-const POLYGON_EXCHANGE_INFO_URL = `${POLYGON_HOST}/v3/reference/exchanges?asset_class=stocks`;
-const POLYGON_TICKER_INFO_URL = `${POLYGON_HOST}/v3/reference/tickers`;
+import {
+  POLYGON_EXCHANGE_INFO_URL,
+  POLYGON_TICKER_INFO_URL,
+} from '../../../lib/constants';
 
 const mapTickerDetails = (details: any): CompanyDetails => {
   const result: CompanyDetails = {

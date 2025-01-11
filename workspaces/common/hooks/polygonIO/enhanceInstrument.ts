@@ -5,9 +5,6 @@ import {
   getTickerInfo,
 } from '../../lib/polygon';
 
-const POLYGON_HOST = 'https://api.polygon.io';
-export const POLYGON_TICKER_INFO_URL = `${POLYGON_HOST}/v3/reference/tickers`;
-
 export const enhanceInstrument = async (
   apiKey: string,
   context: Instrument,

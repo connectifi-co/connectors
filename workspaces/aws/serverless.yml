@@ -3,11 +3,11 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs20.x
   timeout: 10
   stackTags:
     classification: dev
-    description: testing hooks
+    description: testing hooks and actions
     environment: "dev"
 
 functions:
@@ -18,26 +18,19 @@ functions:
           path: /
           method: get
 
-  openfigi:
-    handler: hooks/openfigi.handler
+  deliveryhooks:
+    handler: deliveryhooks.handler
     events:
       - httpApi:
-          path: /openfigi
+          path: /deliveryhooks/{hook}
           method: POST
 
-  polygonHook:
-    handler: hooks/polygon.handler
-    events:
-      - httpApi:
-          path: /polygonHook
-          method: POST
-
-  slack:
-    handler: hooks/slack.handler
-    events:
-      - httpApi:
-          path: /slack
-          method: POST
+  # actions:
+  #   handler: actions.handler
+  #   events:
+  #     - httpApi:
+  #         path: /actions
+  #         method: POST
 
   mapLink:
     handler: actions/mapLink.handler

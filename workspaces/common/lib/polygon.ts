@@ -79,7 +79,6 @@ export const getTickerInfo = async (
   });
   const json: any = await resp.json();
   const data = json.results;
-  // console.log(`ticker response: ${JSON.stringify(data, null, 2)}`);
   if (data) {
     tickerCache.set(tickerKey, data);
     return data;

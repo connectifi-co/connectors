@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "deploy": "serverless deploy --stage ",
+    "deploy": "serverless deploy --stage",
+    "info": "serverless info --stage",
     "undeploy": "serverless remove --stage"
   }
 }

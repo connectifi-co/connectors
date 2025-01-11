@@ -1,5 +1,19 @@
 import type { Context } from '@finos/fdc3';
 
+export class ServerError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ServerError';
+  }
+}
+
+export class RequestError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'RequestError';
+  }
+}
+
 export interface HTTPResponse {
   statusCode: number;
   headers: any;
@@ -10,16 +24,6 @@ export interface HookHandlerParams {
   context: Context;
   destinations: Array<string>;
   keys?: { [key: string]: string };
-}
-
-export type DeliveryHookHandler = (
-  params: HookHandlerParams,
-) => Promise<HTTPResponse>;
-
-export interface DeliveryHookRequest {
-  context: Context;
-  source: string;
-  destinations: string[];
 }
 
 export interface ActionRequest {
@@ -38,15 +42,6 @@ export interface ActionHandlerParams {
 export type ActionHandler = (
   params: ActionHandlerParams,
 ) => Promise<HTTPResponse>;
-
-export interface DeliveryHookResponse {
-  changes: Array<HookChangeResponse>;
-}
-
-export interface HookChangeResponse {
-  destination: string;
-  context: Context;
-}
 
 export interface LinkActionResponse {
   url: string;

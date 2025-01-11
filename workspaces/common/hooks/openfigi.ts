@@ -1,7 +1,7 @@
-import { Context, ContextTypes, Instrument } from '@finos/fdc3';
+import { type Context, ContextTypes, type Instrument } from '@finos/fdc3';
+import type { DeliveryHookHandler } from '@connectifi/sdk';
 import { OPENFIGI_TICKER_INFO_URL } from '../lib/constants';
-import { createResponse } from '../lib/utils';
-import { DeliveryHookHandler } from '../lib/types';
+import { RequestError, ServerError } from '../lib/types';
 
 export const addFIGIToInstrument = async (
   apiKey: string,
@@ -49,27 +49,18 @@ export const addFIGIToInstrument = async (
   return context;
 };
 
-export const openFIGIHook: DeliveryHookHandler = async (params) => {
-  const { keys, context, destinations } = { ...params };
-  const apiKey = keys?.['apiKey'];
+const apiKey = process.env.OPENFIGI_API_KEY;
+
+export const openFIGIHook: DeliveryHookHandler = async (request) => {
   if (!apiKey) {
-    return createResponse(400, {
-      message: 'no api key provided',
-    });
-  }
-  if (context.type === ContextTypes.Instrument) {
-    const newCtx = await addFIGIToInstrument(apiKey, context as Instrument);
-    const changes = destinations.map((destination) => ({
-      destination,
-      context: newCtx,
-    }));
-
-    console.log('figi hook changes', { changes });
-
-    return createResponse(200, changes);
+    throw new ServerError('openfigi api key missing');
   }
 
-  return createResponse(400, {
-    message: 'bad context type',
-  });
+  const { context } = request;
+  if (context.type !== ContextTypes.Instrument) {
+    throw new RequestError('context type not supported');
+  }
+
+  const newCtx = await addFIGIToInstrument(apiKey, context as Instrument);
+  return { context: newCtx };
 };
