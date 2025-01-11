@@ -3,7 +3,23 @@ import type { DeliveryHookHandler } from '@connectifi/sdk';
 import { OPENFIGI_TICKER_INFO_URL } from '../lib/constants';
 import { RequestError, ServerError } from '../lib/types';
 
-export const addFIGIToInstrument = async (
+const apiKey = process.env.OPENFIGI_API_KEY;
+
+export const openFIGIHook: DeliveryHookHandler = async (request) => {
+  if (!apiKey) {
+    throw new ServerError('openfigi api key missing');
+  }
+
+  const { context } = request;
+  if (context.type !== ContextTypes.Instrument) {
+    throw new RequestError('context type not supported');
+  }
+
+  const newCtx = await enhanceInstrument(apiKey, context as Instrument);
+  return { context: newCtx };
+};
+
+const enhanceInstrument = async (
   apiKey: string,
   context: Instrument,
 ): Promise<Context> => {
@@ -47,20 +63,4 @@ export const addFIGIToInstrument = async (
     console.error('error calling open FIGI api', { err: e });
   }
   return context;
-};
-
-const apiKey = process.env.OPENFIGI_API_KEY;
-
-export const openFIGIHook: DeliveryHookHandler = async (request) => {
-  if (!apiKey) {
-    throw new ServerError('openfigi api key missing');
-  }
-
-  const { context } = request;
-  if (context.type !== ContextTypes.Instrument) {
-    throw new RequestError('context type not supported');
-  }
-
-  const newCtx = await addFIGIToInstrument(apiKey, context as Instrument);
-  return { context: newCtx };
 };
