@@ -1,39 +1,20 @@
-import type { Contact, ContactList } from '@finos/fdc3';
-import { createResponse } from '../../utils';
-import { ActionHandler } from '../../types';
+import { type Contact, type ContactList, ContextTypes } from '@finos/fdc3';
+import { LinkActionHandler, RequestError } from '../../types';
 
-const getEmailList = (contactList: ContactList): string => {
-  if (contactList) {
-    const emailArray = contactList.contacts.map((contact) => {
-      return contact.id?.email;
-    });
-    return emailArray.join(',');
-  }
-  return '';
-};
-
-export const emailLink: ActionHandler = async (params) => {
-  const { context } = { ...params };
-  if (context.type === 'cfi.link') {
-    const linkHTML = context.url.replace('&', '%26').replace(' ', '+');
-    const subject = `${context.appId} for ${context.subject.replace('&', '%26')} on Connectifi!`;
-    const body = `${context.text.replace('&', '%26')} - <${linkHTML}>`;
-    const url = `mailto:?subject=${subject}&body=${body}`;
-
-    return createResponse(200, { url });
-  }
-  if (context.type === 'fdc3.contact') {
-    const contact = context as Contact;
-    const url = `mailto:${contact.id.email}`;
-    return createResponse(200, { url });
-  }
-  if (context.type === 'fdc3.contactList') {
-    const emails = getEmailList(context as ContactList);
-    const url = `mailto:${emails}`;
-    return createResponse(200, { url });
+export const emailLink: LinkActionHandler = async (request) => {
+  const { context } = request;
+  if (
+    context.type !== ContextTypes.Contact &&
+    context.type !== ContextTypes.ContactList
+  ) {
+    throw new RequestError('context type not supported');
   }
 
-  return createResponse(400, {
-    message: 'bad context type',
-  });
+  let url: string;
+  if (context.type === ContextTypes.Contact) {
+    url = `mailto:${(context as Contact).id.email}`;
+  } else if (context.type === ContextTypes.ContactList) {
+    url = `mailto:${(context as ContactList).contacts.map((c) => c.id?.email).join(',')}`;
+  }
+  return { url };
 };

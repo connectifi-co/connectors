@@ -20,32 +20,23 @@ export interface HTTPResponse {
   body: string;
 }
 
-export interface HookHandlerParams {
-  context: Context;
-  destinations: Array<string>;
-  keys?: { [key: string]: string };
-}
-
 export interface ActionRequest {
   context: Context;
   intent: string;
   source: string;
-  destination: string;
+  target: string;
 }
 
-export interface ActionHandlerParams {
-  context: Context;
-  intent?: string;
-  keys?: { [key: string]: string };
-}
-
-export type ActionHandler = (
-  params: ActionHandlerParams,
-) => Promise<HTTPResponse>;
+export interface LinkActionRequest extends ActionRequest {};
 
 export interface LinkActionResponse {
   url: string;
 }
+
+export type LinkActionHandler = (
+  params: LinkActionRequest,
+) => Promise<LinkActionResponse>;
+
 
 export interface Prompt extends Context {
   type: 'connect.prompt';
@@ -144,4 +135,16 @@ export interface Query extends Context {
   name: string;
   text: string;
   modifiers?: { [key: string]: string };
+}
+
+export enum ContextTypes {
+  CompanyDetails = 'connect.companyDetails',
+  Completion = 'connect.completion',
+  InstrumentPrice = 'connect.instrumentPrice',
+  Link = 'connect.link',
+  List = 'connect.list',
+  Location = 'connect.location',
+  Query = 'connect.query',
+  Prompt = 'connect.prompt',
+  Summary = 'connect.summary',
 }

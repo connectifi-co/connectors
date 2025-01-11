@@ -5,7 +5,7 @@ import { getDetails } from './getDetails';
 
 export const polygonIOHandler: ActionHandler = async (params) => {
   const { context, intent, keys } = { ...params };
-  const apiKey = keys && keys['apiKey'];
+  const apiKey = keys?.['apiKey'];
   if (!apiKey) {
     return createResponse(400, {
       message: 'api key not found',

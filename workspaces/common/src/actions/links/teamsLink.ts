@@ -1,32 +1,42 @@
-import type { Context, Contact, ContactList } from '@finos/fdc3';
-import { createResponse } from '../../utils';
-import { ActionHandler, HTTPResponse } from '../../types';
+import {
+  type Context,
+  ContextTypes,
+  type Contact,
+  type ContactList,
+  type ChatInitSettings,
+} from '@finos/fdc3';
+import { LinkActionHandler, RequestError } from '../../types';
 
-interface ChatInitSettings {
-  type: 'fdc3.chat.intiSettings';
-  message: Message;
-  members: ContactList;
-}
-
-interface Message {
-  text: { [key: string]: string };
-}
-
-const getEmailList = (contactList: ContactList): string => {
-  if (contactList) {
-    const emailArray = contactList.contacts.map((contact) => {
-      return contact.id?.email;
-    });
-    return emailArray.join(',');
+export const teamsLink: LinkActionHandler = async (request) => {
+  const { context } = request;
+  if (
+    context.type !== ContextTypes.Contact &&
+    context.type !== ContextTypes.ContactList &&
+    context.type !== ContextTypes.ChatInitSettings
+  ) {
+    throw new RequestError('context type not supported');
   }
-  return '';
+
+  let url;
+  if (context.type === ContextTypes.Contact) {
+    const url = `https://teams.microsoft.com/l/chat/0/0?users=${(context as Contact).id.email}`;
+    return { url };
+  } else if (context.type === ContextTypes.ContactList) {
+    const emails = (context as ContactList).contacts
+      .map((c) => c.id?.email)
+      .join(',');
+    url = `https://teams.microsoft.com/l/chat/0/0?users=${emails}`;
+  } else {
+    url = getInitSettingsUrl(context);
+  }
+  return { url };
 };
 
-const handleInitSettings = (context: Context): HTTPResponse => {
+const getInitSettingsUrl = (context: Context) => {
   const settings = context as ChatInitSettings;
   let emails = '';
   if (settings.members) {
-    emails = getEmailList(settings.members);
+    emails = settings.members.contacts.map((c) => c.id?.email).join(',');
   }
   const message = settings.message;
   let body = '';
@@ -36,31 +46,5 @@ const handleInitSettings = (context: Context): HTTPResponse => {
     body = message.text['text/plain'];
   }
   console.log('handleInitSettings!', body);
-  const url = `https://teams.microsoft.com/l/chat/0/0?users=${emails}&message=${body}`;
-  return createResponse(200, { url });
-};
-
-const handleContactList = (context: ContactList): HTTPResponse => {
-  const emails = getEmailList(context);
-  const url = `https://teams.microsoft.com/l/chat/0/0?users=${emails}`;
-  return createResponse(200, { url });
-};
-
-export const teamsLink: ActionHandler = async (params) => {
-  const { context } = { ...params };
-  if (context.type === 'fdc3.contact') {
-    const url = `https://teams.microsoft.com/l/chat/0/0?users=${(context as Contact).id.email}`;
-    return createResponse(200, { url });
-  }
-  if (context.type === 'fdc3.chat.initSettings') {
-    return handleInitSettings(context);
-  }
-  if (context.type === 'fdc3.contactList') {
-    const contactList = context as ContactList;
-    return handleContactList(contactList);
-  }
-
-  return createResponse(400, {
-    message: 'unhandled intent and/or context type',
-  });
+  return `https://teams.microsoft.com/l/chat/0/0?users=${emails}&message=${body}`;
 };
