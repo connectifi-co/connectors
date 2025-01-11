@@ -1,4 +1,4 @@
-import type { ActionRequest } from '../../common/lib/types';
+import type { ActionRequest } from '../../common/types';
 import { emailLink } from '../../common/actions/links/emailLink';
 
 export async function handler(event: any) {

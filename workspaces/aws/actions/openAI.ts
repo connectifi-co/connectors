@@ -1,4 +1,4 @@
-import type { ActionRequest } from '../../common/lib/types';
+import type { ActionRequest } from '../../common/types';
 import { openAIHandler } from '../../common/actions/api/openAI/index';
 
 export async function handler(event: any) {

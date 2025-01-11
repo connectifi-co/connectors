@@ -1,4 +1,4 @@
-import { createResponse } from '../common/lib/utils';
+import { createResponse } from '../common/utils';
 
 export async function handler() {
   return createResponse(200, {

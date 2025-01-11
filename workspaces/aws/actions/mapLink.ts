@@ -1,4 +1,4 @@
-import type { ActionRequest } from '../../common/lib/types';
+import type { ActionRequest } from '../../common/types';
 import { mapLink } from '../../common/actions/links/mapLink';
 
 export async function handler(event: any) {

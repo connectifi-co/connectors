@@ -1,4 +1,4 @@
-import type { ActionRequest } from '../../common/lib/types';
+import type { ActionRequest } from '../../common/types';
 import { polygonIOHandler } from '../../common/actions/api/polygonIO/index';
 
 export async function handler(event: any) {

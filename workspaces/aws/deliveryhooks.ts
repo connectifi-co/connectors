@@ -1,8 +1,8 @@
 import type { DeliveryHookRequest } from '@connectifi/sdk';
-import { createResponse } from '../common/lib/utils';
-import { addMiddleware } from '../common/lib/middleware';
+import { createResponse } from '../common/utils';
+import { addMiddleware } from '../common/middleware';
 import { deliveryHooksMap } from '../common/hooks';
-import { RequestError } from '../common/lib/types';
+import { RequestError } from '../common/types';
 
 const baseHandler = async (event: any) => {
   // look up delivery hook and invoke
