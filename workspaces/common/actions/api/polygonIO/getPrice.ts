@@ -1,6 +1,6 @@
 import type { Context } from '@finos/fdc3';
-import { InstrumentPrice } from '../../../lib/types';
-import { POLYGON_HOST } from '../../../lib/constants';
+import { InstrumentPrice } from '../../../types';
+import { POLYGON_HOST } from '../../../constants';
 
 const POLYGON_SNAPSHOT_URL = `${POLYGON_HOST}/v2/snapshot/locale/us/markets/stocks/tickers`;
 

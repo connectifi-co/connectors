@@ -1,6 +1,6 @@
-import { createResponse } from '../../lib/utils';
-import { ActionHandler, HTTPResponse } from '../../lib/types';
-import { Context, Contact, ContactList } from '@finos/fdc3';
+import type { Context, Contact, ContactList } from '@finos/fdc3';
+import { createResponse } from '../../utils';
+import { ActionHandler, HTTPResponse } from '../../types';
 
 interface ChatInitSettings {
   type: 'fdc3.chat.intiSettings';

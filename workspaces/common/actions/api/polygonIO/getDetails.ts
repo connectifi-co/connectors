@@ -1,9 +1,9 @@
 import type { Context } from '@finos/fdc3';
-import { CompanyDetails } from '../../../lib/types';
+import { CompanyDetails } from '../../../types';
 import {
   POLYGON_EXCHANGE_INFO_URL,
   POLYGON_TICKER_INFO_URL,
-} from '../../../lib/constants';
+} from '../../../constants';
 
 const mapTickerDetails = (details: any): CompanyDetails => {
   const result: CompanyDetails = {

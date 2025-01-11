@@ -1,5 +1,5 @@
 import type { Context } from '@finos/fdc3';
-import { List } from '../../../lib/types';
+import { List } from '../../../types';
 import OpenAI from 'openai';
 
 const contextDescriptors = [

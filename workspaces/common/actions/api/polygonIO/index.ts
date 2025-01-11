@@ -1,5 +1,5 @@
-import { ActionHandler, Prompt } from '../../../lib/types';
-import { createResponse } from '../../../lib/utils';
+import { ActionHandler, Prompt } from '../../../types';
+import { createResponse } from '../../../utils';
 import { getPrice } from './getPrice';
 import { getDetails } from './getDetails';
 

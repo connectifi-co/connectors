@@ -1,5 +1,5 @@
 import type { Context } from '@finos/fdc3';
-import { Prompt, Completion } from '../../../lib/types';
+import { Prompt, Completion } from '../../../types';
 import OpenAI from 'openai';
 /*
 example prompts:

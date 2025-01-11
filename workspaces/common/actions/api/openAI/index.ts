@@ -1,12 +1,12 @@
-import { ActionHandler, Prompt } from '../../../lib/types';
-import { createResponse } from '../../../lib/utils';
+import { ActionHandler, Prompt } from '../../../types';
+import { createResponse } from '../../../utils';
 import { generate } from './generate';
 import { summarize } from './summarize';
 import { findSimilar } from './findSimilar';
 
 export const openAIHandler: ActionHandler = async (params) => {
   const { context, intent, keys } = { ...params };
-  const apiKey = keys && keys['apiKey'];
+  const apiKey = keys?.['apiKey'];
   if (!apiKey) {
     return createResponse(400, {
       message: 'api keys not found',

@@ -1,6 +1,6 @@
-import { createResponse } from '../../lib/utils';
-import { ActionHandler } from '../../lib/types';
-import { Contact, ContactList } from '@finos/fdc3';
+import type { Contact, ContactList } from '@finos/fdc3';
+import { createResponse } from '../../utils';
+import { ActionHandler } from '../../types';
 
 const getEmailList = (contactList: ContactList): string => {
   if (contactList) {
