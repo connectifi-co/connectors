@@ -72,6 +72,13 @@ export interface List extends Context {
   items: Array<Context>;
 }
 
+export interface Entities extends Context {
+  type: 'connect.entities';
+  companies: Array<Context>;
+  people: Array<Context>;
+  places: Array<Context>;
+}
+
 export interface CompanyDetails extends Context {
   type: 'connect.companyDetails';
   id: {

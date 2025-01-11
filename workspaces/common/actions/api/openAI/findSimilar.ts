@@ -58,10 +58,8 @@ export const findSimilar = async (apiKey: string, context: Context):Promise<List
         model: "gpt-4o-mini",
     });
 
-    console.log('****Chat Completion', chatCompletion);
     if (chatCompletion?.choices.length > 0){
         const itemsContent = chatCompletion?.choices[0].message.content;
-        console.log('****Chat Completion - itemsContent', itemsContent);
         if (itemsContent){
             const contexts = JSON.parse(itemsContent);
             items = contexts.contexts;
