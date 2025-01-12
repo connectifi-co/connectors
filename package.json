@@ -7,14 +7,11 @@
   "workspaces": [
     "workspaces/aws",
     "workspaces/azure",
-    "workspaces/cli"
+    "workspaces/common",
+    "workspaces/testing"
   ],
   "scripts": {
-    "data:aws": "ts-node generate.ts aws",
-    "data:azure": "ts-node generate.ts azure",
-    "data:http": "ts-node generate.ts http",
-    "testHook": "ts-node postToHook.ts",
-    "test": "npx jest",
+    "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "prettier './**/*.{js,ts,json}' --write",
