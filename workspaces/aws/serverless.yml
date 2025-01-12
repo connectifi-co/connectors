@@ -12,21 +12,21 @@ provider:
 
 functions:
   index:
-    handler: index.handler
+    handler: src/index.handler
     events:
       - httpApi:
           path: /
           method: get
 
   deliveryhooks:
-    handler: deliveryhooks.handler
+    handler: src/deliveryhooks.handler
     events:
       - httpApi:
           path: /deliveryhooks/{hook}
           method: POST
 
   actions:
-    handler: actions.handler
+    handler: src/actions.handler
     events:
       - httpApi:
           path: /actions/{action}
