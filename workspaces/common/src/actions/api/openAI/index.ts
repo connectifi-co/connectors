@@ -1,4 +1,9 @@
-import { APIActionHandler, Prompt, RequestError, ServerError } from '../../../types';
+import {
+  APIActionHandler,
+  Prompt,
+  RequestError,
+  ServerError,
+} from '../../../types';
 import { createResponse } from '../../../utils';
 import { generate } from './generate';
 import { summarize } from './summarize';
