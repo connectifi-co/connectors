@@ -1,17 +1,17 @@
-import { ActionHandler, Prompt } from '../../../types';
+import { APIActionHandler, Prompt, ServerError } from '../../../types';
 import { createResponse } from '../../../utils';
 import { generate } from './generate';
 import { summarize } from './summarize';
 import { findSimilar } from './findSimilar';
 
-export const openAIHandler: ActionHandler = async (params) => {
-  const { context, intent, keys } = { ...params };
-  const apiKey = keys?.['apiKey'];
+const apiKey = process.env.OPEN_AI_API_KEY;
+
+export const openAIHandler: APIActionHandler = async (params) => {
   if (!apiKey) {
-    return createResponse(400, {
-      message: 'api keys not found',
-    });
+    throw new ServerError('openAI api key missing');
   }
+
+  const { context, intent } = { ...params };
   if (intent === 'Generate') {
     const completion = await generate(apiKey, context as Prompt);
     return createResponse(200, completion);

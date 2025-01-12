@@ -25,32 +25,11 @@ functions:
           path: /deliveryhooks/{hook}
           method: POST
 
-  # actions:
-  #   handler: actions.handler
-  #   events:
-  #     - httpApi:
-  #         path: /actions
-  #         method: POST
-
-  mapLink:
-    handler: actions/mapLink.handler
+  actions:
+    handler: actions.handler
     events:
       - httpApi:
-          path: /mapLink
-          method: POST
-  
-  emailLink:
-    handler: actions/emailLink.handler
-    events:
-      - httpApi:
-          path: /emailLink
-          method: POST
-
-  teamsLink:
-    handler: actions/teamsLink.handler
-    events:
-      - httpApi:
-          path: /teamsLink
+          path: /actions/{action}
           method: POST
 
   openAI:

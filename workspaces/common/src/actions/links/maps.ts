@@ -1,4 +1,9 @@
-import { ContextTypes, LinkActionHandler, type Location, RequestError } from '../../types';
+import {
+  ContextTypes,
+  LinkActionHandler,
+  type Location,
+  RequestError,
+} from '../../types';
 import { cleanPostalCode } from '../../utils';
 
 export const mapLink: LinkActionHandler = async (params) => {

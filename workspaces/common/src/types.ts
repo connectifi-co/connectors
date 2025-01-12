@@ -27,16 +27,15 @@ export interface ActionRequest {
   target: string;
 }
 
-export interface LinkActionRequest extends ActionRequest {};
-
 export interface LinkActionResponse {
   url: string;
 }
 
-export type LinkActionHandler = (
-  params: LinkActionRequest,
-) => Promise<LinkActionResponse>;
+export type APIActionHandler = (params: ActionRequest) => Promise<any>;
 
+export type LinkActionHandler = (
+  params: ActionRequest,
+) => Promise<LinkActionResponse>;
 
 export interface Prompt extends Context {
   type: 'connect.prompt';

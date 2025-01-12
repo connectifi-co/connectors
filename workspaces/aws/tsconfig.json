@@ -4,5 +4,5 @@
     "paths": {
       "@/common/*": ["../common/src/*"]
     }
-  },
+  }
 }

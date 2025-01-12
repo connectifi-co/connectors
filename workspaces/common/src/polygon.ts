@@ -15,7 +15,7 @@ const exchangeAcronyms = [
 ];
 export const getExchangeAcronym = (mic: string): string | undefined => {
   const ex = exchangeAcronyms.find((ex: any) => ex.mic === mic);
-  return ex && ex.acronym;
+  return ex?.acronym;
 };
 
 let exchangeData: [] | undefined = undefined;

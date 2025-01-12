@@ -1,7 +1,7 @@
 import { ContextTypes } from '@finos/fdc3';
-import { getTickerInfo } from '../../../polygon';
-import { LinkActionHandler, RequestError, ServerError } from '../../../types';
-import { cleanPostalCode } from '../../../utils';
+import { getTickerInfo } from '../../polygon';
+import { LinkActionHandler, RequestError, ServerError } from '../../types';
+import { cleanPostalCode } from '../../utils';
 
 const apiKey = process.env.POLYGON_API_KEY;
 
