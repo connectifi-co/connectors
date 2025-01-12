@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "test:post": "ts-node src/postToHook.ts"
-  }
-}

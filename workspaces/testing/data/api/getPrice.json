@@ -1,9 +1,0 @@
-{
-  "intent": "GetPrice",
-  "context": {
-    "type": "fdc3.instrument",
-    "id": {
-      "ticker": "AAPL"
-    }
-  }
-}
