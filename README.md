@@ -37,7 +37,6 @@ API Actions allow an application to leverage REST services to return data for an
 Connector implementations, written in Typescript, along with Serverless configurations for common cloud providers.  Currently supported providers are:
  - AWS
  - Azure (TBD)
- - Google (TBD)
 
 ## Getting Started
 
@@ -57,50 +56,11 @@ Deployment is standard serverless deployment.  There is more info in the README 
 
 NPM workspaces project.  There are workspaces for all the cloud providers which contain serverless configs as well as some common etc folders.
 
-- `workspaces/aws` where all the AWS serverless configuration lives
+- `workspaces/aws` AWS IAC and provider specific code
 - `workspaces/common` common typescript functions, most of the code lives here
-- `workspaces/common/actions` home for *Action* type connectors
-- `workspaces/common/hooks` home for *Delivery Hook* type connectors
 
 ## Adding a Connector
-Adding a new connector is easy.  Follow these steps for AWS:
-- Put your business logic, according to connector type, into the `workspaces/common` directory
-- Add an AWS entry point into `workspaces/aws`, using the `actions` or `hooks` folder, depending on your connector type
-- Make an entry in `workspaces/aws/serverless.yml` to expose the endpoint for your connector and direct it to your entry point in `workspaces/aws`
-- test, deploy, and call it from your Connectifi environment!
-
-## Test Data
-
-To make it easier to test connectors, there are some generic data utilities included in the project.  The can be used to generate input from an HTTP standpoint or generate specific provider events for executing functions directly.
-
-Some examples of using the test utility are below.  The generator will simply output the JSON to standard out.  you can copy/paste from your terminal or pipe to files.
-
-### aws lambda events
-
-```bash
-# generate AWS lambda event for a hook that processes fdc3.instrument context types
-npm run data:aws fdc3.instrument AMZN
-
-# generate AWS lambda event for a hook that processes fdc3.instrumentList context types
-npm run data:aws fdc3.instrumentList AMZN,TSLA,BBG,MSFT
-
-# generate AWS lambda event for a hook that processes fdc3.instrument context types
-npm run data:aws fdc3.contact brian@connectifi.co
-
-# generate AWS lambda event for a hook that processes fdc3.instrumentList context types
-npm run data:aws fdc3.contactList brian@connectifi.co,nick@connectifi.co,kevin@connectifi.co
-```
-
-### http payloads
-
-```bash
-# generate an http post payload for a hook that processes fdc3.instrument context types
-npm run data:aws fdc3.instrument AMZN
-
-# generate an http post payload for a hook that processes fdc3.instrumentList context types
-npm run data:http fdc3.instrumentList AMZN,TSLA,BBG
-
-```
+Adding a new connector is easy.  Follow the steps outlined in the [common readme](workspaces/common/README.md)
 
 ## Unit and Integration tests
 
@@ -116,5 +76,3 @@ export CFI_OPENAI_INTEGRATION_TESTS=true # any value will work
 ```
 
 This will enable the tests in `workspaces/common/actions/api/openAI/tests/openai-integration-tests.spec.ts`. You can extend or use these tests as a template for your openAI actions
-
-
