@@ -1,0 +1,9 @@
+{
+  "intent": "GetDetails",
+  "context": {
+    "type": "fdc3.instrument",
+    "id": {
+      "ticker": "MSFT"
+    }
+  }
+}

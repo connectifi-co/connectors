@@ -6,7 +6,6 @@ import {
   RequestError,
   ServerError,
 } from '../../types';
-import { createResponse } from '../../utils';
 import { getTickerInfo } from '../../polygon';
 import { POLYGON_HOST } from '../../constants';
 
@@ -26,10 +25,10 @@ export const polygonIOHandler: APIActionHandler = async (request) => {
 
   if (intent === 'GetDetails') {
     const details = await getDetails(apiKey, context.id.ticker);
-    return createResponse(200, details);
+    return details;
   } else if (intent === 'GetPrice') {
     const price = await getPrice(apiKey, context);
-    return createResponse(200, price);
+    return price;
   }
 };
 
