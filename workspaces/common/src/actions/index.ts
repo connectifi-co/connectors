@@ -5,6 +5,8 @@ import { mapLink } from './links/maps';
 import { companyHQLink } from './links/polygon';
 import { emailLink } from './links/email';
 import { slackLink } from './links/slack';
+import { polygonIOHandler } from './api/polygon';
+import { openAIHandler } from './api/openAI';
 
 const ActionsMap = () => {
   const actions: Map<string, LinkActionHandler | APIActionHandler> = new Map();
@@ -21,5 +23,7 @@ actions.addHandler('companyHQLink', companyHQLink);
 actions.addHandler('locationLink', mapLink);
 actions.addHandler('slackLink', slackLink);
 actions.addHandler('teamsLink', teamsLink);
+actions.addHandler('polygonIO', polygonIOHandler);
+actions.addHandler('openAI', openAIHandler);
 
 export const actionsMap = actions;

@@ -16,7 +16,7 @@ const DeliveryHooksMap = () => {
 
 const hooks = DeliveryHooksMap();
 hooks.addHandler('openfigi', openFIGIHook);
-hooks.addHandler('polygon', polygonHook);
+hooks.addHandler('polygonIO', polygonHook);
 hooks.addHandler('slack', slackHook);
 
 export const deliveryHooksMap = hooks;

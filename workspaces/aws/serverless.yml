@@ -32,20 +32,6 @@ functions:
           path: /actions/{action}
           method: POST
 
-  openAI:
-    handler: actions/openAI.handler
-    events:
-      - httpApi:
-          path: /openAI
-          method: POST
-
-  polygonIO:
-    handler: actions/polygonIO.handler
-    events:
-      - httpApi:
-          path: /polygonIO
-          method: POST
-  
 plugins:
   - serverless-esbuild
   - serverless-dotenv-plugin

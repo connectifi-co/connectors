@@ -16,7 +16,7 @@ const apiKey = process.env.POLYGON_API_KEY;
 
 export const polygonIOHandler: APIActionHandler = async (request) => {
   if (!apiKey) {
-    throw new ServerError('polygon api key missing');
+    throw new ServerError('polygonIO api key missing');
   }
 
   const { context, intent } = request;
