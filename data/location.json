@@ -1,0 +1,19 @@
+{
+  "context": {
+    "type": "connect.location",
+    "id": {
+      "geo": {
+        "lat": 40.776676,
+        "long": -73.971321
+      }
+    }
+  },
+  "destinations": [
+    { "appId": "destAppOne" },
+    { "appId": "destAppTwo" },
+    { "appId": "destAppThree" }
+  ],
+  "source": {
+    "appId": "sourceApp"
+  }
+}
