@@ -1,7 +1,7 @@
 // openai-integration-tests.spec.ts
 import { Context } from '@finos/fdc3';
 import { findSimilar } from '../findSimilar'; // Adjust the import path accordingly
-import { List } from '../../../../lib/types';
+import { List } from '../../../../types';
 
 // set these via your env
 const CFI_OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
