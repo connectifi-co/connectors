@@ -12,14 +12,14 @@ provider:
 
 functions:
   deliveryhooks:
-    handler: src/deliveryhooks.handler
+    handler: src/index.deliveryHookHandler
     events:
       - httpApi:
           path: /deliveryhooks/{hook}
           method: POST
 
   actions:
-    handler: src/actions.handler
+    handler: src/index.actionHandler
     events:
       - httpApi:
           path: /actions/{action}
