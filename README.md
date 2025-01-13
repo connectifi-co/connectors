@@ -25,20 +25,17 @@ Launch Actions allow an application to perform data transformations ahead of lau
 
 <img src="./images/launchAction-diagram.jpeg" alt="Launch Action Diagram" width="80%">
 
-### API Actions
-API Actions allow an application to leverage REST services to return data for an intent.  The response data can then be used by the calling application without the need to launch another instance.  For example, from a it's UI, an application can raise the *GetPrice* intent and the end user can choose the source they want to get pricing data from.  On response, the application UI can be updated based on a standard context data format.  The raising application didn't have to build bespoke integrations into each data source and it can let the end user choose their source based on their own preference.
+### Data/API Actions
+Data/API Actions allow an application to leverage REST services to return data for an intent.  The response data can then be used by the calling application without the need to launch another instance.  For example, from a it's UI, an application can raise the *GetPrice* intent and the end user can choose the source they want to get pricing data from.  On response, the application UI can be updated based on a standard context data format.  The raising application didn't have to build bespoke integrations into each data source and it can let the end user choose their source based on their own preference.
 
 <img src="./images/apiAction-diagram.jpeg" alt="API Action Diagram" width="80%">
 
-# Using this Project 
-
-## What's inside
-
-Connector implementations, written in Typescript, along with Serverless configurations for common cloud providers.  Currently supported providers are:
- - AWS
- - Azure (TBD)
 
 ## Getting Started
+
+This project contains connector implementations, written in Typescript, along with Serverless configurations for common cloud providers.  It's build using the connectifi SDK.  
+
+### Setup
 
 The first step is to install the dependencies for this repo:
 
@@ -46,23 +43,24 @@ The first step is to install the dependencies for this repo:
 npm install
 ```
 
-Once you have the dependencies installed, the next thing to do is select your cloud provider.  You'll need to have your credentials all setup in order to deploy the API functions.  There is more info in the README files in each provider directory.
+Once you have the dependencies installed, the next thing to do is deploy to your cloud provider.
 
 ### Deployment
 
-Deployment is standard serverless deployment.  There is more info in the README files in each provider directory.
+Deployment is standard serverless deployment.  You'll need to have your credentials all setup in order to deploy the API functions.  There is more info in the README files in each cloud provider directory:
+ - [AWS README](workspaces/aws/README.md)
 
-## Directories
+### Project folder structure
 
-NPM workspaces project.  There are workspaces for all the cloud providers which contain serverless configs as well as some common etc folders.
+This is a simple NPM workspaces project.  There are workspaces for all the cloud providers which contain serverless configs as well as the main common folder where 95% of all the source code lives.
 
 - `workspaces/aws` AWS IAC and provider specific code
 - `workspaces/common` common typescript functions, most of the code lives here
 
-## Adding a Connector
+### Adding a Connector
 Adding a new connector is easy.  Follow the steps outlined in the [common readme](workspaces/common/README.md)
 
-## Unit and Integration tests
+### Unit and Integration tests
 
 ```bash
 npm run test
