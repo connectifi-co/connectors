@@ -1,6 +1,6 @@
 import { addMiddleware } from '@/common/middleware';
 import { actionsMap } from '@/common/actions';
-import { deliveryHooksMap } from '@/common/hooks';
+import { deliveryHooksMap } from '@/common/deliveryhooks';
 import { RequestError } from '@/common/types';
 
 // delivery hook handler function
