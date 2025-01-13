@@ -1,6 +1,6 @@
-import { slackLink } from "./slack";
-import { ActionRequest, RequestError, ServerError } from "../../types";
-import { SLACK_USER_LOOKUP_URL } from "../../constants";
+import { slackLink } from './slack';
+import { ActionRequest, RequestError, ServerError } from '../../types';
+import { SLACK_USER_LOOKUP_URL } from '../../constants';
 
 const mockAPIKey = 'thisisthatapikeyverysecureindeed';
 const mockUserId = 'theuserid';
@@ -11,9 +11,9 @@ const mockReqCustom: ActionRequest = {
   source: '',
   target: '',
   context: {
-    type: "test.context",
+    type: 'test.context',
     id: {
-      field: "test.context.field",
+      field: 'test.context.field',
     },
   },
 };
@@ -35,15 +35,15 @@ const mockJson = jest.fn();
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
-describe("slack link misconfiguration", () => {
-  it("throws api key missing error", async () => {
+describe('slack link misconfiguration', () => {
+  it('throws api key missing error', async () => {
     expect(async () => {
       await slackLink(mockReqCustom);
     }).rejects.toThrow(ServerError);
   });
 });
 
-describe("slack link normal", () => {
+describe('slack link normal', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
@@ -58,12 +58,12 @@ describe("slack link normal", () => {
     jest.clearAllMocks();
   });
 
-  it("returns correct link url", async () => {
-    const mockResp = { 
+  it('returns correct link url', async () => {
+    const mockResp = {
       user: {
         id: mockUserId,
         team_id: mockTeamId,
-      }
+      },
     };
     mockJson.mockReturnValue(mockResp);
     mockText.mockReturnValue(JSON.stringify(mockResp));
@@ -74,18 +74,18 @@ describe("slack link normal", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       `${SLACK_USER_LOOKUP_URL}${mockReqContact.context.id.email}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
           Authorization: `Bearer ${mockAPIKey}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      }
+      },
     );
 
     expect(url).toEqual(`slack://user?team=${mockTeamId}&id=${mockUserId}`);
   });
 
-  it("handles invalid context type", async () => {
+  it('handles invalid context type', async () => {
     const mockResp = {};
     mockJson.mockReturnValue(mockResp);
     mockText.mockReturnValue(JSON.stringify(mockResp));
@@ -94,5 +94,5 @@ describe("slack link normal", () => {
     expect(async () => {
       await slackLink(mockReqCustom);
     }).rejects.toThrow(RequestError);
-  });  
+  });
 });

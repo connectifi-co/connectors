@@ -1,7 +1,10 @@
-import type { DeliveryHookRequest } from "@connectifi/sdk";
-import { polygonHook } from "./polygon";
-import { RequestError, ServerError } from "../types";
-import { POLYGON_EXCHANGE_INFO_URL, POLYGON_TICKER_INFO_URL } from "../constants";
+import type { DeliveryHookRequest } from '@connectifi/sdk';
+import { polygonHook } from './polygon';
+import { RequestError, ServerError } from '../types';
+import {
+  POLYGON_EXCHANGE_INFO_URL,
+  POLYGON_TICKER_INFO_URL,
+} from '../constants';
 
 const mockAPIKey = 'thisisthatapikeyverysecureindeed';
 
@@ -17,9 +20,9 @@ const mockReqCustom: DeliveryHookRequest = {
   source: { appId: 'thesource' },
   destinations: [{ appId: 'thedest' }],
   context: {
-    type: "test.context",
+    type: 'test.context',
     id: {
-      field: "test.context.field",
+      field: 'test.context.field',
     },
   },
 };
@@ -35,15 +38,15 @@ const mockJson = jest.fn();
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
-describe("polygon hook misconfiguration", () => {
-  it("throws api key missing error", async () => {
+describe('polygon hook misconfiguration', () => {
+  it('throws api key missing error', async () => {
     expect(async () => {
       await polygonHook(mockReqCustom);
     }).rejects.toThrow(ServerError);
   });
 });
 
-describe("polygon hook normal", () => {
+describe('polygon hook normal', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
@@ -62,7 +65,7 @@ describe("polygon hook normal", () => {
     process.env = originalEnv;
   });
 
-  it("handles invalid context type", async () => {
+  it('handles invalid context type', async () => {
     const mockResp = {};
     mockJson.mockReturnValue(mockResp);
     mockText.mockReturnValue(JSON.stringify(mockResp));
@@ -73,7 +76,7 @@ describe("polygon hook normal", () => {
     }).rejects.toThrow(RequestError);
   });
 
-  it("returns correct context", async () => {
+  it('returns correct context', async () => {
     const mockTickerInfoResp = {
       results: {
         name: 'silly name',
@@ -93,8 +96,8 @@ describe("polygon hook normal", () => {
           name: 'theexchange',
           mic: mockMIC,
           operating_mic: mockMIC,
-        }
-      ]
+        },
+      ],
     };
     mockJson.mockReturnValueOnce(mockExchangeInfoResp);
     mockText.mockReturnValueOnce(JSON.stringify(mockExchangeInfoResp));
@@ -102,26 +105,28 @@ describe("polygon hook normal", () => {
 
     const { context } = await polygonHook(mockReqInstrument);
 
-    expect(mockFetch).toHaveBeenNthCalledWith(1,
+    expect(mockFetch).toHaveBeenNthCalledWith(
+      1,
       `${POLYGON_TICKER_INFO_URL}/${mockReqInstrument.context.id.ticker}?apiKey=${mockAPIKey}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
           'Content-Type': 'text/plain',
           outputFormat: 'application/json',
         },
-      }
+      },
     );
 
-    expect(mockFetch).toHaveBeenNthCalledWith(2,
+    expect(mockFetch).toHaveBeenNthCalledWith(
+      2,
       `${POLYGON_EXCHANGE_INFO_URL}&apiKey=${mockAPIKey}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
           'Content-Type': 'text/plain',
           outputFormat: 'application/json',
         },
-      }
+      },
     );
 
     expect(context).toEqual({
@@ -135,8 +140,8 @@ describe("polygon hook normal", () => {
       market: {
         MIC: mockMIC,
         COUNTRY_ISOALPHA2: 'US',
-        name: 'theexchange'
-      }
+        name: 'theexchange',
+      },
     });
   });
 });
