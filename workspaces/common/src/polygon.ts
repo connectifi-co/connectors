@@ -22,8 +22,6 @@ let exchangeData: [] | undefined = undefined;
 const loadExchangeData = async (apiKey: string) => {
   const apiURL = `${POLYGON_EXCHANGE_INFO_URL}&apiKey=${apiKey}`;
 
-  console.log(`calling polygon exchange info api: ${apiURL}`);
-
   const rHeaders = {
     'Content-Type': 'text/plain',
     outputFormat: 'application/json',
@@ -67,7 +65,6 @@ export const getTickerInfo = async (
   }
 
   const apiURL = `${POLYGON_TICKER_INFO_URL}/${ticker}?apiKey=${apiKey}`;
-  console.log(`ticker not cached, calling polygon api: ${apiURL}`);
 
   const rHeaders = {
     'Content-Type': 'text/plain',

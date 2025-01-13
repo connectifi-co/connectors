@@ -4,9 +4,8 @@ import { ContextTypes } from '@finos/fdc3';
 import { RequestError, ServerError } from '../types';
 import { getExchangeAcronym, getExchangeName, getTickerInfo } from '../polygon';
 
-const apiKey = process.env.POLYGON_API_KEY;
-
 export const polygonHook: DeliveryHookHandler = async (request) => {
+  const apiKey = process.env.POLYGON_API_KEY;
   if (!apiKey) {
     throw new ServerError('polygon api key missing');
   }
@@ -42,7 +41,7 @@ const enhanceInstrument = async (
   apiKey: string,
   context: Instrument,
 ): Promise<Instrument> => {
-  const tickerInfo = await getTickerInfo(apiKey, context.id?.ticker || '');
+  const tickerInfo = await getTickerInfo(apiKey, context.id.ticker);
   if (tickerInfo) {
     const newContext: Instrument = { ...context };
     if (!newContext.name) {

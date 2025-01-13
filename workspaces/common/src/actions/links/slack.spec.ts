@@ -25,7 +25,7 @@ const mockReqContact: ActionRequest = {
   context: {
     type: 'fdc3.contact',
     id: {
-      ticker: 'brian@connectifi.co',
+      email: 'brian@connectifi.co',
     },
   },
 };
