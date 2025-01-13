@@ -1,10 +1,10 @@
 import type { DataActionHandler, LinkActionHandler } from '@connectifi/sdk';
 
-import { teamsLink } from './links/teams';
-import { mapLink } from './links/maps';
-import { companyHQLink } from './links/polygon';
-import { emailLink } from './links/email';
-import { slackLink } from './links/slack';
+import { teamsLink } from './link/teams';
+import { mapLink } from './link/maps';
+import { companyHQLink } from './link/polygon';
+import { emailLink } from './link/email';
+import { slackLink } from './link/slack';
 import { polygonIOHandler } from './data/polygon';
 import { openAIHandler } from './data/openAI';
 
