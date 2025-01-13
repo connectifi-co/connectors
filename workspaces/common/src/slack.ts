@@ -15,7 +15,6 @@ export const getSlackIDs = async (
     Authorization: `Bearer ${apiKey}`,
   };
 
-  console.log(`calling slack api at: ${apiURL}`);
   const res = await fetch(apiURL, { method: 'GET', headers });
   const resJson: any = await res.json();
   return {

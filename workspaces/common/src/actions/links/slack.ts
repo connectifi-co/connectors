@@ -2,9 +2,8 @@ import { ContextTypes } from '@finos/fdc3';
 import { LinkActionHandler, RequestError, ServerError } from '../../types';
 import { getSlackIDs } from '../../slack';
 
-const apiKey = process.env.SLACK_API_KEY;
-
 export const slackLink: LinkActionHandler = async (request) => {
+  const apiKey = process.env.SLACK_API_KEY;
   if (!apiKey) {
     throw new ServerError('slack api key missing');
   }
