@@ -1,5 +1,4 @@
-import type { APIActionHandler } from '../types';
-import type { LinkActionHandler } from '@connectifi/sdk';
+import type { DataActionHandler, LinkActionHandler } from '@connectifi/sdk';
 
 import { teamsLink } from './links/teams';
 import { mapLink } from './links/maps';
@@ -10,10 +9,10 @@ import { polygonIOHandler } from './api/polygon';
 import { openAIHandler } from './api/openAI';
 
 const ActionsMap = () => {
-  const actions: Map<string, LinkActionHandler | APIActionHandler> = new Map();
+  const actions: Map<string, LinkActionHandler | DataActionHandler> = new Map();
 
   return {
-    addHandler: (name: string, handler: LinkActionHandler | APIActionHandler) =>
+    addHandler: (name: string, handler: LinkActionHandler | DataActionHandler) =>
       actions.set(name, handler),
     getHandler: (name: string) => actions.get(name),
   };

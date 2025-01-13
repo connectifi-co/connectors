@@ -14,15 +14,6 @@ export class RequestError extends Error {
   }
 }
 
-export interface ActionRequest {
-  context: Context;
-  intent: string;
-  source: string;
-  target: string;
-}
-
-export type APIActionHandler = (params: ActionRequest) => Promise<any>;
-
 export interface Prompt extends Context {
   type: 'connect.prompt';
   text: string;

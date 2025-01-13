@@ -1,6 +1,6 @@
+import type { DataActionHandler } from '@connectifi/sdk';
 import type { Context } from '@finos/fdc3';
 import {
-  APIActionHandler,
   CompanyDetails,
   InstrumentPrice,
   RequestError,
@@ -13,7 +13,7 @@ const POLYGON_SNAPSHOT_URL = `${POLYGON_HOST}/v2/snapshot/locale/us/markets/stoc
 
 const apiKey = process.env.POLYGON_API_KEY;
 
-export const polygonIOHandler: APIActionHandler = async (request) => {
+export const polygonIOHandler: DataActionHandler = async (request) => {
   if (!apiKey) {
     throw new ServerError('polygonIO api key missing');
   }

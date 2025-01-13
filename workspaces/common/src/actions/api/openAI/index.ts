@@ -1,5 +1,5 @@
+import type { DataActionHandler } from '@connectifi/sdk';
 import {
-  APIActionHandler,
   Prompt,
   RequestError,
   ServerError,
@@ -10,7 +10,7 @@ import { findSimilar } from './findSimilar';
 
 const apiKey = process.env.OPEN_AI_API_KEY;
 
-export const openAIHandler: APIActionHandler = async (params) => {
+export const openAIHandler: DataActionHandler = async (params) => {
   if (!apiKey) {
     throw new ServerError('openAI api key missing');
   }
