@@ -12,8 +12,10 @@ const ActionsMap = () => {
   const actions: Map<string, LinkActionHandler | DataActionHandler> = new Map();
 
   return {
-    addHandler: (name: string, handler: LinkActionHandler | DataActionHandler) =>
-      actions.set(name, handler),
+    addHandler: (
+      name: string,
+      handler: LinkActionHandler | DataActionHandler,
+    ) => actions.set(name, handler),
     getHandler: (name: string) => actions.get(name),
   };
 };

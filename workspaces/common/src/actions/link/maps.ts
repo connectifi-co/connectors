@@ -1,9 +1,5 @@
 import type { LinkActionHandler } from '@connectifi/sdk';
-import {
-  ContextTypes,
-  type Location,
-  RequestError,
-} from '../../types';
+import { ContextTypes, type Location, RequestError } from '../../types';
 import { cleanPostalCode } from '../../utils';
 
 export const mapLink: LinkActionHandler = async (params) => {
