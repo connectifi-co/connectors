@@ -1,5 +1,6 @@
+import type { LinkActionHandler } from '@connectifi/sdk';
 import { type Contact, type ContactList, ContextTypes } from '@finos/fdc3';
-import { LinkActionHandler, RequestError } from '../../types';
+import { RequestError } from '../../types';
 
 export const emailLink: LinkActionHandler = async (request) => {
   const { context } = request;

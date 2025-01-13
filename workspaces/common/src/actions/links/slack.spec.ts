@@ -1,15 +1,16 @@
+import type { LinkActionRequest } from '@connectifi/sdk';
 import { slackLink } from './slack';
-import { ActionRequest, RequestError, ServerError } from '../../types';
+import { RequestError, ServerError } from '../../types';
 import { SLACK_USER_LOOKUP_URL } from '../../constants';
 
 const mockAPIKey = 'thisisthatapikeyverysecureindeed';
 const mockUserId = 'theuserid';
 const mockTeamId = 'theusersteamid';
 
-const mockReqCustom: ActionRequest = {
-  intent: '',
-  source: '',
-  target: '',
+const mockReqCustom: LinkActionRequest = {
+  intent: 'someIntention',
+  source: 'sourcedir',
+  target: { appId: 'targetapp' },
   context: {
     type: 'test.context',
     id: {
@@ -18,10 +19,9 @@ const mockReqCustom: ActionRequest = {
   },
 };
 
-const mockReqContact: ActionRequest = {
-  intent: '',
+const mockReqContact: LinkActionRequest = {
   source: '',
-  target: '',
+  target: { appId: 'targetapp' },
   context: {
     type: 'fdc3.contact',
     id: {

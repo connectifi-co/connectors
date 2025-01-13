@@ -1,5 +1,6 @@
+import type { LinkActionHandler } from '@connectifi/sdk';
 import { ContextTypes } from '@finos/fdc3';
-import { LinkActionHandler, RequestError, ServerError } from '../../types';
+import { RequestError, ServerError } from '../../types';
 import { getSlackIDs } from '../../slack';
 
 export const slackLink: LinkActionHandler = async (request) => {

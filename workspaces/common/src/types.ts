@@ -14,12 +14,6 @@ export class RequestError extends Error {
   }
 }
 
-export interface HTTPResponse {
-  statusCode: number;
-  headers: any;
-  body: string;
-}
-
 export interface ActionRequest {
   context: Context;
   intent: string;
@@ -27,15 +21,7 @@ export interface ActionRequest {
   target: string;
 }
 
-export interface LinkActionResponse {
-  url: string;
-}
-
 export type APIActionHandler = (params: ActionRequest) => Promise<any>;
-
-export type LinkActionHandler = (
-  params: ActionRequest,
-) => Promise<LinkActionResponse>;
 
 export interface Prompt extends Context {
   type: 'connect.prompt';

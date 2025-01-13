@@ -1,3 +1,4 @@
+import type { LinkActionHandler } from '@connectifi/sdk';
 import {
   type Context,
   ContextTypes,
@@ -5,7 +6,7 @@ import {
   type ContactList,
   type ChatInitSettings,
 } from '@finos/fdc3';
-import { LinkActionHandler, RequestError } from '../../types';
+import { RequestError } from '../../types';
 
 export const teamsLink: LinkActionHandler = async (request) => {
   const { context } = request;

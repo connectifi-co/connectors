@@ -1,4 +1,5 @@
-import type { APIActionHandler, LinkActionHandler } from '../types';
+import type { APIActionHandler } from '../types';
+import type { LinkActionHandler } from '@connectifi/sdk';
 
 import { teamsLink } from './links/teams';
 import { mapLink } from './links/maps';
@@ -12,7 +13,8 @@ const ActionsMap = () => {
   const actions: Map<string, LinkActionHandler | APIActionHandler> = new Map();
 
   return {
-    addHandler: (name: string, dh: LinkActionHandler) => actions.set(name, dh),
+    addHandler: (name: string, handler: LinkActionHandler | APIActionHandler) =>
+      actions.set(name, handler),
     getHandler: (name: string) => actions.get(name),
   };
 };

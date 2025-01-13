@@ -16,7 +16,7 @@
     "format:check": "prettier './**/*.{js,ts,json}' --check"
   },
   "dependencies": {
-    "@connectifi/sdk": "0.1.0-beta.3",
+    "@connectifi/sdk": "0.1.0-beta.4",
     "@middy/core": "^6.0.0",
     "@middy/http-json-body-parser": "^6.0.0",
     "openai": "^4.71.1"

@@ -1,6 +1,6 @@
+import type { LinkActionHandler } from '@connectifi/sdk';
 import {
   ContextTypes,
-  LinkActionHandler,
   type Location,
   RequestError,
 } from '../../types';

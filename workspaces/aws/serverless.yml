@@ -11,13 +11,6 @@ provider:
     environment: "dev"
 
 functions:
-  index:
-    handler: src/index.handler
-    events:
-      - httpApi:
-          path: /
-          method: get
-
   deliveryhooks:
     handler: src/deliveryhooks.handler
     events:
