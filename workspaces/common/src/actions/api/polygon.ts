@@ -7,9 +7,7 @@ import {
   ServerError,
 } from '../../types';
 import { getTickerInfo } from '../../polygon';
-import { POLYGON_HOST } from '../../constants';
-
-const POLYGON_SNAPSHOT_URL = `${POLYGON_HOST}/v2/snapshot/locale/us/markets/stocks/tickers`;
+import { POLYGON_SNAPSHOT_URL } from '../../constants';
 
 const apiKey = process.env.POLYGON_API_KEY;
 
