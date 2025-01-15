@@ -24,13 +24,13 @@ Deploying connectifi-hooks to stage dev (us-east-1)
 ✔ Service deployed to stack connectifi-hooks-dev (41s)
 
 endpoints:
-  GET - https://q25wgl0gzg.execute-api.us-east-1.amazonaws.com/
-  POST - https://q25wgl0gzg.execute-api.us-east-1.amazonaws.com/openfigi
-  POST - https://q25wgl0gzg.execute-api.us-east-1.amazonaws.com/polygon
+  GET - https://XXXXXXXX.execute-api.us-east-1.amazonaws.com/
+  POST - https://XXXXXXXX.execute-api.us-east-1.amazonaws.com/deliveryhooks/{hook}
+  POST - https://XXXXXXXX.execute-api.us-east-1.amazonaws.com/actions/{action}
 functions:
-  index: connectifi-hooks-dev-index (41 kB)
-  openfigi: connectifi-hooks-dev-openfigi (41 kB)
-  polygon: connectifi-hooks-dev-polygon (41 kB)
+  index: connectifi-hooks-dev-index (227 kB)
+  deliveryhooks: connectifi-hooks-dev-deliveryhooks (227 kB)
+  actions: connectifi-hooks-dev-actions (227 kB)
 ```
 
 _Note_: After deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
@@ -39,22 +39,6 @@ To undeploy the stack, run the undeploy command
 
 ```bash
 npm run undeploy <stagename>
-```
-
-### Running the lambda locally
-
-You can invoke the lambdas locally by calling each by name:
-
-```bash
-npx serverless invoke local --function polygonHook -p ../../data/aws/amzn-hook-event.json
-```
-
-### Running the lambda after deployment
-
-After successful deployment, you can test the hook by calling the function by name:
-
-```bash
-npx serverless invoke --function polygonHook -p ../../data/aws/amzn-hook-event.json
 ```
 
 ### API Key management
@@ -66,3 +50,5 @@ cp .env.sample .env
 
 # edit the .env file to contain the real apy key value
 ```
+
+_Note_: This puts the secret values in the function environment variables. For production deployments, you might want to use a secure parameter store such as AWS SSM or equivalent.

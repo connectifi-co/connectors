@@ -9,5 +9,11 @@
     // whatever paths you intend to lint
     "workspaces/**/*.ts"
   ],
-  "exclude": ["**/node_modules", "**/eslint.config.mjs", "jest.config.ts", "*.md", "*.json" ]
+  "exclude": [
+    "**/node_modules",
+    "**/eslint.config.mjs",
+    "jest.config.ts",
+    "*.md",
+    "*.json"
+  ]
 }
