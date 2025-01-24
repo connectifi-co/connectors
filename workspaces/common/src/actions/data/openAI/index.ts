@@ -7,31 +7,31 @@ import {
 import { generate } from './generate';
 import { summarize } from './summarize';
 import { findSimilar } from './findSimilar';
+import { generatePrompt } from './generatePrompt';
+import { getEntities } from './getEntities';
 
 const apiKey = process.env.OPEN_AI_API_KEY;
+
+export const OPENAI_MODEL = 'gpt-4o-mini';
 
 export const openAIHandler: DataActionHandler = async (params) => {
   if (!apiKey) {
     throw new ServerError('openAI api key missing');
   }
-
-  const { context, intent } = { ...params };
-  if (
-    intent !== 'Generate' &&
-    intent !== 'FindSimilar' &&
-    intent !== 'Summarize'
-  ) {
-    throw new RequestError('intent not supported');
-  }
-
-  if (intent === 'Generate') {
-    const completion = await generate(apiKey, context as Prompt);
-    return completion;
-  } else if (intent === 'Summarize') {
-    const summary = await summarize(apiKey, context);
-    return summary;
-  } else if (intent === 'FindSimilar') {
-    const list = await findSimilar(apiKey, context);
-    return list;
+  
+  const { context, intent } = params;
+  switch (intent) {
+    case "Generate":
+      return generate(apiKey, context as Prompt);
+    case "GeneratePrompt":
+      return generatePrompt(apiKey, context);
+    case "Summarize":
+      return summarize(apiKey, context);
+    case "FindSimilar":
+      return findSimilar(apiKey, context);
+    case "GetEntities":
+      return getEntities(apiKey, context);
+    default:
+      throw new RequestError('intent not supported');
   }
 };
