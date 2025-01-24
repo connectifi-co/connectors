@@ -1,35 +1,29 @@
 import type { Context } from '@finos/fdc3';
 import { List } from '../../../types';
 import OpenAI from 'openai';
+import { OPENAI_MODEL } from '.';
 
-export const findSimilar = async (
-  apiKey: string,
-  context: Context,
-): Promise<List> => {
-  let items: Array<Context> = [];
+export const findSimilar = async ( apiKey: string, context: Context ): Promise<List> => {
   const openai = new OpenAI({ apiKey: apiKey });
 
   const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [];
   messages.push({ role: 'system', content: findSimilarPrompt });
   messages.push({ role: 'user', content: contextToPrompt(context) });
 
-  console.log('calling chatGPT', messages);
-
   const chatCompletion = await openai.chat.completions.create({
     messages,
-    model: 'gpt-4o-mini',
+    model: OPENAI_MODEL,
   });
 
-  console.log('****Chat Completion', chatCompletion);
-
+  let items: Array<Context> = [];
   if (chatCompletion?.choices.length > 0) {
     const itemsContent = chatCompletion?.choices[0].message.content;
-    console.log('****Chat Completion - itemsContent', itemsContent);
     if (itemsContent) {
       const contexts = JSON.parse(itemsContent);
       items = contexts.contexts;
     }
   }
+
   return {
     type: 'connect.list',
     listType: context.type,

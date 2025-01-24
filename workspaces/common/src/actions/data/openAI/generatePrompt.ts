@@ -1,10 +1,39 @@
 import type { Context } from '@finos/fdc3';
 import { Prompt } from '../../../types';
 import OpenAI from "openai";
+import { OPENAI_MODEL } from '.';
+
+export const generatePrompt = async (apiKey: string, context: Context):Promise<Prompt> => {
+  const openai = new OpenAI({ apiKey: apiKey });
+
+  const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
+  if (context){
+    messages.push( { role: "system", content: createSystemPrompt(context)});
+    messages.push({ role: "user", content: contextToPrompt(context)});
+  }
+
+  const chatCompletion = await openai.chat.completions.create({
+    messages,
+    model: OPENAI_MODEL,
+  });
+
+  if (chatCompletion?.choices.length > 0){
+    return  {
+      type:'connect.prompt',
+      text: chatCompletion.choices[0].message.content || '',
+      context: context
+    };
+  }
+
+  return {
+    type:'connect.prompt',
+    text: 'Error: Please Try Again'
+  }
+}
 
 const contextDescriptors = [
-    `Context type of 'fdc3.instrument' describes a stock or other financial instrument.  The 'id' property lists common identifiers for the instrument such as 'ticker'.`,
-    `Context type of 'fdc3.contact' describes a person or contact - typically from a CRM or similar system.  The 'id' property lists common identifiers for the contact such as 'email'.`,
+  `Context type of 'fdc3.instrument' describes a stock or other financial instrument.  The 'id' property lists common identifiers for the instrument such as 'ticker'.`,
+  `Context type of 'fdc3.contact' describes a person or contact - typically from a CRM or similar system.  The 'id' property lists common identifiers for the contact such as 'email'.`,
 ];
 
 const createSystemPrompt = ( context: Context) => { return `
@@ -30,35 +59,3 @@ const contextToPrompt = (context: Context): string => {
     ${JSON.stringify(context)}
     `;
 };
-
-export const generatePrompt = async (apiKey: string, context: Context):Promise<Prompt> => {
-   
-    const openai = new OpenAI({
-        apiKey: apiKey,
-    });
-
-    const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
-    if (context){
-        messages.push( { role: "system", content: createSystemPrompt(context)});
-        messages.push({ role: "user", content: contextToPrompt(context)});
-    }
-
-    const chatCompletion = await openai.chat.completions.create({
-        messages,
-        model: "gpt-4o-mini",
-    });
-
-    if (chatCompletion?.choices.length > 0){
-       return  {
-        type:'connect.prompt',
-        text: chatCompletion.choices[0].message.content || '',
-        context: context
-       };
-    }
-    
-    return {
-        type:'connect.prompt',
-        text: 'Error: Please Try Again'
-    }
-}
-

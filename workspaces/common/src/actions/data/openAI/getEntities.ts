@@ -1,6 +1,38 @@
 import type { Context } from '@finos/fdc3';
 import { Prompt, Entities } from '../../../types';
 import OpenAI from "openai";
+import { OPENAI_MODEL } from '.';
+
+export const getEntities = async (apiKey: string, context: Context):Promise<Entities> => {
+  const openai = new OpenAI({ apiKey: apiKey });
+
+  const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
+  messages.push({ role: "system", content: createSystemPrompt()});
+  messages.push({ role: "user", content: contextToPrompt(context as Prompt)});
+  messages.push({ role: "user", content: dataReturnPrompt});
+  const chatCompletion = await openai.chat.completions.create({
+    messages,
+    model: OPENAI_MODEL,
+  });
+
+  if (chatCompletion?.choices.length > 0){
+    const message = chatCompletion.choices[0].message.content;
+    if (message) {
+      const entities: Entities = JSON.parse(message);
+      if (entities){
+          return entities;
+      }
+    }    
+  }
+
+  return {
+    type:'connect.entities',
+    error: 'Summary could not be generated',
+    companies:[],
+    people: [],
+    places: []
+  }
+}
 
 const contextDescriptors = [
     `Context type of 'fdc3.instrument' describes a stock or other financial instrument.  The 'id' property lists common identifiers for the instrument such as 'ticker'.`,
@@ -103,40 +135,3 @@ const dataReturnPrompt = `
     Only provide JSON as a response.
     Do not include additional fields, markdown, or any explanatory text. Only return the JSON object in the specified format.
 `;
-
-export const getEntities = async (apiKey: string, context: Context):Promise<Entities> => {
-   
-    let items: Array<Context> = [];
-    const openai = new OpenAI({
-        apiKey: apiKey,
-    });
-
-    const messages: Array<OpenAI.Chat.Completions.ChatCompletionMessageParam> = [];
-    messages.push({ role: "system", content: createSystemPrompt()});
-    messages.push({ role: "user", content: contextToPrompt(context as Prompt)});
-    messages.push({ role: "user", content: dataReturnPrompt});
-    const chatCompletion = await openai.chat.completions.create({
-        messages,
-        model: "gpt-4o-mini",
-    });
-
-    if (chatCompletion?.choices.length > 0){
-        const message = chatCompletion.choices[0].message.content;
-        if (message) {
-            const entities: Entities = JSON.parse(message);
-            if (entities){
-                return entities;
-            }
-        }
-       
-    }
-    
-    return {
-        type:'connect.entities',
-        error: 'Summary could not be generated',
-        companies:[],
-        people: [],
-        places: []
-    }
-}
-

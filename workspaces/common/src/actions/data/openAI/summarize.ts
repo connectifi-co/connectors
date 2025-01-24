@@ -1,11 +1,9 @@
 import type { Context } from '@finos/fdc3';
 import { Summary } from '../../../types';
 import OpenAI from 'openai';
+import { OPENAI_MODEL } from '.';
 
-export const summarize = async (
-  apiKey: string,
-  context: Context,
-): Promise<Summary> => {
+export const summarize = async ( apiKey: string, context: Context ): Promise<Summary> => {
   const openai = new OpenAI({ apiKey: apiKey });
 
   const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [];
@@ -15,7 +13,7 @@ export const summarize = async (
 
   const chatCompletion = await openai.chat.completions.create({
     messages,
-    model: 'gpt-4o-mini',
+    model: OPENAI_MODEL,
   });
 
   if (chatCompletion?.choices.length > 0) {
