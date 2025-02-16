@@ -1,9 +1,9 @@
 import { DataActionHandler } from '@connectifi/sdk';
-import { postToContextChannel, postToChannel } from './messages';
+import { postToContextChannel, postToChannel, postToChat } from './messages';
 import { getChannels, getOrCreateChannel } from './channels';
 import { getUsers } from './users';
 import { getMessageTargets } from './messages';
-import { ServerError, RequestError, ChannelMessage } from '../../../types';
+import { ServerError, RequestError, ChannelMessage, ChatMessage } from '../../../types';
 
 const apiKey = process.env.SLACK_API_KEY;
 
@@ -22,6 +22,11 @@ export const slackAPIHandler: DataActionHandler = async (params) => {
     }
     //default to generic channel posting
     const result = await postToContextChannel(apiKey, context);
+    return result;
+  }
+
+  if (intent === "PostToChat") {
+    const result = await postToChat(apiKey, context as ChatMessage);
     return result;
   }
 

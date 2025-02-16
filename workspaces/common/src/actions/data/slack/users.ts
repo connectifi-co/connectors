@@ -5,9 +5,7 @@ import { List } from '../../../types';
 export const getUsers =  async (apiKey:  string): Promise<List> => {
     const slackAPI = new WebClient(apiKey);
 
-    const users = await slackAPI.users.list({
-
-    });
+    const users = await slackAPI.users.list({});
     //filter out bot and restricted users
     const members = users.members.filter((user) => {
         if (user.deleted) {
@@ -34,7 +32,7 @@ export const getUsers =  async (apiKey:  string): Promise<List> => {
             name: user.name,
             id: {
                 email: user.profile.email,
-                slackId: user.id,
+                slack: user.id,
                 teamId: user.team_id
 
             }
@@ -48,3 +46,19 @@ export const getUsers =  async (apiKey:  string): Promise<List> => {
     }
 
 };
+
+export const decorateContact = async (apiKey: string, contact: Contact): Promise<Contact> => {
+    if (!contact.id.email) {
+        return contact;
+    }
+    const slackAPI = new WebClient(apiKey);
+
+    const users = await slackAPI.users.list({});
+    const found = users.members.filter((user) => {
+        return user.profile.email === contact.id.email;
+    });
+    if (found.length > 0){
+        contact.id.slack = found[0].id;
+    }
+    return contact;
+}

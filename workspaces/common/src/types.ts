@@ -1,4 +1,4 @@
-import type { Context } from '@finos/fdc3';
+import type { Context, Contact } from '@finos/fdc3';
 
 export class ServerError extends Error {
   constructor(message: string) {
@@ -122,17 +122,14 @@ export interface Query extends Context {
 
 export interface ChannelMessage extends Context {
   type: 'connect.channelMessage';
-  channel: string;
+  channel: Channel;
   message: string;
   context?: Context;
 }
 
 export interface ChatMessage extends Context {
   type: 'connect.chatMessage';
-  target: {
-    channel?: string;
-    users?: Array<string>
-  },
+  target: Contact;
   message: string;
   context?: Context;
 }
@@ -159,4 +156,6 @@ export enum ContextTypes {
   Prompt = 'connect.prompt',
   Summary = 'connect.summary',
   ChannelMessage = 'connect.channelMessage',
+  ChatMessage = 'connect.chatMessage',
+  Channel = 'connect.channel',
 }

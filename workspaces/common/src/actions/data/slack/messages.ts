@@ -1,11 +1,20 @@
 import { Context } from '@finos/fdc3';
-import { ServerError, ChannelMessage, List } from '../../../types';
+import { ServerError, ChannelMessage, List, ChatMessage } from '../../../types';
 import { WebClient } from '@slack/web-api';
 import { getSlackChannels, getOrCreateChannel, SlackChannel, getChannels } from './channels';
-import { contextToChannelName } from './common';
-import { getUsers } from './users';
+import { getUsers, decorateContact } from './users';
 
 const codeMarkdown = '```';
+export const contextToChannelName = (context: Context): string => {
+  return context.type.replace(".", "-");
+};
+
+const formatMessage = (context: ChannelMessage | ChatMessage): string => {
+  if (context.context){
+    return `${context.message} ${codeMarkdown} ${JSON.stringify(context.context)} ${codeMarkdown}`;
+  }
+  return `${context.message}`;
+};
 
 //post messages to channels named for the context type
 export const postToChannel = async (apiKey: string, context: ChannelMessage): Promise<Context> => {
@@ -20,7 +29,7 @@ export const postToChannel = async (apiKey: string, context: ChannelMessage): Pr
   const channels = await  getSlackChannels(apiKey);
   let channel: SlackChannel | undefined;
   channel = channels.find((channel)=> {
-        return (channel.name === context.channel);
+        return (channel.name === context.channel.name);
   });
  
   if (channel) {
@@ -32,6 +41,28 @@ export const postToChannel = async (apiKey: string, context: ChannelMessage): Pr
   }
 
   throw new ServerError('channel could not be found');
+};
+
+
+//post dm to a contact
+export const postToChat = async (apiKey: string, context: ChatMessage): Promise<Context> => {
+
+  const slackAPI = new WebClient(apiKey);
+  //decorate contact?
+  if (!context.target.id.slack){
+    const contact = await decorateContact(apiKey, context.target);
+    context.target = contact;
+  }
+
+  if (context.target.id.slack) {
+      await slackAPI.chat.postMessage({
+        channel: context.target.id.slack,
+        text: formatMessage(context)
+      });
+    return context;
+  }
+
+  throw new ServerError('contact could not be found');
 };
 
 //post messages to channels named for the context type
