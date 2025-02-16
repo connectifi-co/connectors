@@ -120,6 +120,34 @@ export interface Query extends Context {
   modifiers?: { [key: string]: string };
 }
 
+export interface ChannelMessage extends Context {
+  type: 'connect.channelMessage';
+  channel: string;
+  message: string;
+  context?: Context;
+}
+
+export interface ChatMessage extends Context {
+  type: 'connect.chatMessage';
+  target: {
+    channel?: string;
+    users?: Array<string>
+  },
+  message: string;
+  context?: Context;
+}
+
+export interface Channel extends Context {
+  type: 'connect.channel';
+  id: {
+    slack?: string;
+    teams?: string;
+    fdc3?: string;
+  },
+  name: string;
+}
+
+
 export enum ContextTypes {
   CompanyDetails = 'connect.companyDetails',
   Completion = 'connect.completion',
@@ -130,4 +158,5 @@ export enum ContextTypes {
   Query = 'connect.query',
   Prompt = 'connect.prompt',
   Summary = 'connect.summary',
+  ChannelMessage = 'connect.channelMessage',
 }
