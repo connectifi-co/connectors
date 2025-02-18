@@ -19,6 +19,7 @@
     "@connectifi/sdk": "0.1.1",
     "@middy/core": "^6.0.0",
     "@middy/http-json-body-parser": "^6.0.0",
+    "@slack/web-api": "^7.8.0",
     "openai": "^4.71.1"
   },
   "devDependencies": {

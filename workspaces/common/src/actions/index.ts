@@ -7,6 +7,7 @@ import { emailLink } from './link/email';
 import { slackLink } from './link/slack';
 import { polygonIOHandler } from './data/polygon';
 import { openAIHandler, openAIFinanceAssistantHandler, openAIContrarianFinanceAssistantHandler, openAIGrowthFinanceAssistantHandler } from './data/openAI';
+import { slackAPIHandler } from './data/slack';
 
 const ActionsMap = () => {
   const actions: Map<string, LinkActionHandler | DataActionHandler> = new Map();
@@ -31,5 +32,6 @@ actions.addHandler('openAI', openAIHandler);
 actions.addHandler('openAI-financeAssistant', openAIFinanceAssistantHandler);
 actions.addHandler('openAI-growthAssistant', openAIGrowthFinanceAssistantHandler);
 actions.addHandler('openAI-contrarianAssistant', openAIContrarianFinanceAssistantHandler);
+actions.addHandler('slackAPI', slackAPIHandler);
 
 export const actionsMap = actions;
