@@ -7,6 +7,7 @@ import { emailLink } from './link/email';
 import { slackLink } from './link/slack';
 import { polygonIOHandler } from './data/polygon';
 import { openAIHandler } from './data/openAI';
+import { slackAPIHandler } from './data/slack';
 
 const ActionsMap = () => {
   const actions: Map<string, LinkActionHandler | DataActionHandler> = new Map();
@@ -28,5 +29,6 @@ actions.addHandler('slackLink', slackLink);
 actions.addHandler('teamsLink', teamsLink);
 actions.addHandler('polygonIO', polygonIOHandler);
 actions.addHandler('openAI', openAIHandler);
+actions.addHandler('slackAPI', slackAPIHandler);
 
 export const actionsMap = actions;
