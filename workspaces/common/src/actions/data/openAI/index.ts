@@ -12,6 +12,10 @@ import { getEntities } from './getEntities';
 import { getCompanySummary, getSimilarCompanies } from './financeAssistant';
 import { getCompanyContrarianSummary, getSimilarContrarianCompanies } from './financeAssistant-contrarian';
 import { getCompanyGrowthSummary, getSimilarGrowthCompanies } from './financeAssistant-growth';
+import { handleWorkflowPrompt } from './ragWorkflowDemo/workflowAgent';
+import { handlePartQuery } from './ragWorkflowDemo/partQueryAgent';
+import { handleAssemblyQuery } from './ragWorkflowDemo/assemblyQueryAgent';
+import { WorkflowPrompt } from './ragWorkflowDemo/types';
 
 const apiKey = process.env.OPEN_AI_API_KEY;
 
@@ -85,4 +89,23 @@ export const openAIContrarianFinanceAssistantHandler: DataActionHandler = async 
     default:
       throw new RequestError('intent not supported');
   }
+};
+
+export const RAGWorkflowDemoHandler: DataActionHandler = async (params) => {
+  if (!apiKey) {
+    throw new ServerError('openAI api key missing');
+  }
+  
+  const { context, intent } = params;
+  if (intent === "StepWorkflow"){
+    return handleWorkflowPrompt(apiKey, context as WorkflowPrompt);
+  }
+  if (intent === "QueryParts") {
+    return handlePartQuery(apiKey, context as Prompt);
+  }
+  if (intent === "QueryAssemblies") {
+    return handleAssemblyQuery(apiKey, context as Prompt);
+  }
+  throw new RequestError('intent not supported');
+  
 };
