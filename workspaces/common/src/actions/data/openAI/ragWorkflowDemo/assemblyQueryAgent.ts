@@ -82,7 +82,8 @@ const noExample: AssemblyRecordList = {
   };
 
 const responseDescription: string = `
-  Return results in JSON using the AssemblyRecordList context data type.  Following are some examples.
+  Return results in JSON using the AssemblyRecordList context data type.  
+  Following are some examples of results.
   Multiple matches:
     ${JSON.stringify(multipleExample)}
   Single match:
@@ -106,6 +107,10 @@ export const handleAssemblyQuery = async ( apiKey: string, prompt: Prompt ): Pro
     });
     messages.push({ role: 'user', content: `
       Please find the best matches for the following query against the catalog of assemblies.
+      Ensure that the assembly matched is consistent with the assemblyId options in the following Part Record:
+      ${JSON.stringify(prompt.context)}
+
+      If you can't find any matches, please offer suggestions of systems a user may choose from.
       ${prompt.text}
       ` });
   

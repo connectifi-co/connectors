@@ -3,7 +3,17 @@ import { ServerError } from '../../../../types';
 import OpenAI from 'openai';
 import { OPENAI_MODEL } from '..';
 import crypto from 'crypto';
-import { WorkflowPrompt, WorkflowResponse, WorkflowStep, IntentDetectionResponse, intentDetectionSchema, Part, PartRecordList, AssemblyRecordList } from './types';
+import { 
+  WorkflowPrompt, 
+  WorkflowResponse, 
+  WorkflowStep, 
+  IntentDetectionResponse, 
+  intentDetectionSchema, 
+  Part, 
+  PartRecordList, 
+  AssemblyRecordList, 
+  AssemblyRecord, 
+  PartRecord } from './types';
 
 /*
   Procedure:
@@ -21,6 +31,17 @@ import { WorkflowPrompt, WorkflowResponse, WorkflowStep, IntentDetectionResponse
 
 */
 
+const validPartExample: Part = {
+  type: 'connect.demo.part',
+  id: {
+    partId: 'partId',
+    assemblyId: 'assemblyId'
+  },
+  name: 'partName',
+  description: 'part description',
+  isValid: true,
+};
+
 const completePartExample: Part = {
   type: 'connect.demo.part',
   id: {
@@ -28,7 +49,8 @@ const completePartExample: Part = {
     assemblyId: 'assemblyId'
   },
   name: 'partName',
-  description: 'part description'
+  description: 'part description',
+  isValid: false,
 };
 
 const QueryPartsResponseExample: IntentDetectionResponse = {
@@ -61,10 +83,16 @@ const supportedIntents: string = `
 `;
 
 const completePartDescription: string = `
-  A Part is complete when all properties for the part have valid values, 
+  A Part is complete when all properties for the part have values, 
   including a partId and assemblyId in the id field, and a name and description.  
   Here is an example of a complete Part JSON:
   ${JSON.stringify(completePartExample)}
+`;
+
+const validPartDescription: string = `
+  A Part is valid when it is complete and all values have been validated and the isValid property is true.
+  Here is an example of a valid Part JSON:
+  ${JSON.stringify(validPartExample)}
 `;
 
 const isResultComplete = (result: Part) => {
@@ -74,9 +102,45 @@ const isResultComplete = (result: Part) => {
       result.id.partId;
 };
 
+const isResultValid = (result: Part) => {
+  return  result.description &&
+      result.name &&
+      result.id.assemblyId &&
+      result.id.partId && 
+      result.isValid;
+};
+
+const isInvalid = (prompt: WorkflowPrompt) => {
+  const part: PartRecordList = prompt.prompt.context as PartRecordList;
+  return part.isValid === false;
+};
+
+const  getStepTarget = (prompt: WorkflowPrompt, intent: string): string => {
+  if (prompt.targets?.[intent]){
+    return prompt.targets[intent];
+  }
+  return undefined;
+};
+
+const listParts = (parts: Array<PartRecord>): string => {
+  const result: Array<string> = [];
+  parts.forEach((part) => {
+    result.push(` - ${part.name}`);
+  });
+  return result.join(' ');
+};
+
+const listAssemblies = (assemblies: Array<AssemblyRecord>): string => {
+  const result: Array<string> = [];
+  assemblies.forEach((assembly) => {
+    result.push(` - ${assembly.system}`);
+  });
+  return result.join(' ');
+};
 export const handleWorkflowPrompt = async ( apiKey: string, prompt: WorkflowPrompt ): Promise<WorkflowResponse> => {
   console.log('**** handleWorkflowPrompt called', prompt);
-  const codeDelimiter = '```';
+  const startCode = '```';
+  const endCode = '```';
   const openai = new OpenAI({ apiKey: apiKey });
   //is there a result?  if so, check it
   if (prompt.result && isResultComplete(prompt.result as Part)){
@@ -87,15 +151,72 @@ export const handleWorkflowPrompt = async ( apiKey: string, prompt: WorkflowProm
       },
       completion: {
         type: 'connect.completion',
-        text: `:tada: We have found the full details for your part! Here is the full JSON record:
-            ${codeDelimiter}
+        text: `🎉  We have found the details for your part! Here is the full record:
+            ${startCode}
             ${JSON.stringify(prompt.result)}
-            ${codeDelimiter}
+            ${endCode}
         `
       },
       result: prompt.result
     };
   }
+
+  /*if (prompt.result && isInvalid(prompt)){
+    //remove the assembly
+    const newResult: Part = {...(prompt.result as Part)};
+    newResult.id.assemblyId = undefined;
+      
+    return {
+      type: 'connect.workflow.response',
+      id: {
+        workflowId: prompt.id.workflowId
+      },
+      completion: {
+        type: 'connect.completion',
+        text: ` The system you gave doesn't match the assemblies that apply to the part. 
+        Can you re-check your system and try again?
+        `
+      },
+      step: {
+        type:'connect.workflow.step',
+        id: {
+          workflowId: prompt.id.workflowId,
+          stepName: 'QueryAssemblies',
+        },
+        intent: 'QueryAssemblies',
+        context: {
+          type:'connect.prompt',
+          text: 'There are multiple assemblies for this part, which system do you have?'
+        },
+      },
+      result: prompt.result
+    };
+  }
+
+  if (prompt.result && isResultComplete(prompt.result as Part)){
+    const step : WorkflowStep = {
+      type: 'connect.workflow.step',
+      id:  {
+        workflowId: prompt.id.workflowId,
+        stepName: 'QueryParts'
+      },
+      intent: 'QueryParts',
+      target:  getStepTarget(prompt, 'QueryParts'),
+      context: { 
+        type: 'connect.prompt',
+        text: 'Please validate this part record',
+        context: prompt.result
+      },
+    }
+    return {
+      type: 'connect.workflow.response',
+      id: {
+        workflowId: prompt.id.workflowId
+      },
+      step: step,
+      result: prompt.result
+    };
+  }*/
 
   //is there context attached to the prompt?
   const hasContext = prompt.prompt.context !==  undefined;
@@ -129,7 +250,9 @@ export const handleWorkflowPrompt = async ( apiKey: string, prompt: WorkflowProm
           },
           completion: {
             type: 'connect.completion',
-            text: 'Multiple parts were found, please refine your query.'
+            text: `Multiple parts were found. 
+              ${listParts(partsList.items)}
+            Please refine your query.`
           },
           result: prompt.result
         };
@@ -184,7 +307,19 @@ export const handleWorkflowPrompt = async ( apiKey: string, prompt: WorkflowProm
             },
             completion: {
               type: 'connect.completion',
-              text: 'No parts found, please try a different query.'
+              text: 'No matches found, please try a different query.'
+            },
+            step: {
+              type:'connect.workflow.step',
+              id: {
+                workflowId: prompt.id.workflowId,
+                stepName: 'QueryAssemblies',
+              },
+              intent: 'QueryAssemblies',
+              context: {
+                type:'connect.prompt',
+                text: 'There are multiple assemblies for this part, which system do you have?'
+              },
             },
             result: prompt.result
           };
@@ -199,7 +334,21 @@ export const handleWorkflowPrompt = async ( apiKey: string, prompt: WorkflowProm
           },
           completion: {
             type: 'connect.completion',
-            text: 'Multiple assemblies were found, please refine your query.'
+            text: `Multiple assemblies were found.
+            ${listAssemblies(assemblyList.items)}
+            Please refine your query. `
+          },
+          step: {
+            type:'connect.workflow.step',
+            id: {
+              workflowId: prompt.id.workflowId,
+              stepName: 'QueryAssemblies',
+            },
+            intent: 'QueryAssemblies',
+            context: {
+              type:'connect.prompt',
+              text: 'There are multiple assemblies for this part, which system do you have?'
+            },
           },
           result: prompt.result
         };
@@ -286,6 +435,7 @@ export const handleWorkflowPrompt = async ( apiKey: string, prompt: WorkflowProm
               stepName: 'QueryParts'
             },
             intent: 'QueryParts',
+            target:  getStepTarget(prompt, 'QueryParts'),
             context: prompt.prompt,
           }
         }

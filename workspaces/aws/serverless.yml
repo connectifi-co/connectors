@@ -5,6 +5,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   timeout: 10
+  memorySize: 2048
   stackTags:
     classification: dev
     description: testing hooks and actions

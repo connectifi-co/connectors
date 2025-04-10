@@ -18,10 +18,16 @@ const parts: Array<PartRecord> = [
   },
   {
       "partId": "123abc-3",
-      "assemblies": ["h","i","j"],
-      "name": "Diode (1N4007)",
-      "description": "A semiconductor component that allows current to flow in only one direction, often used for rectification in power supplies."
+      "assemblies": ["h","i"],
+      "name": "Big Diode",
+      "description": "Our largest model!  A semiconductor component that allows current to flow in only one direction, often used for rectification in power supplies."
   },
+  {
+    "partId": "123abc-3",
+    "assemblies": ["i","j"],
+    "name": "Little Diode",
+    "description": "Our smallest model! A semiconductor component that allows current to flow in only one direction, often used for rectification in power supplies."
+},
   {
       "partId": "123abc-4",
       "assemblies": ["l","m","n"],
@@ -84,8 +90,18 @@ const parts: Array<PartRecord> = [
 //returns a connect.workflow.response context
 const mainSystemPrompt: string = `
   You are an assistant helping to match user queries to a catalog of parts.
+  Please find the best matches for the following query against the catalog of parts.
+  If you can't find any matches, please offer suggestions.
   This is the catalog:
   ${JSON.stringify(parts)}
+`;
+
+const validationPrompt: string = `
+  If you are asked to validate a part record, do the following:
+  -  look up the record by partId in the parts catalog
+  -  check that the provided record's assemblyId matches one of the assemblies in record found in the catalog
+  - if there is a match, the record is valid, return a response valid flag
+  - if there is no match, the record is invalid, return an invalid flag
 `;
 
 const multipleExample: PartRecordList = {
@@ -118,6 +134,33 @@ const singleExample: PartRecordList = {
   ]
 };
 
+
+const validExample: PartRecordList = {
+  type: 'connect.demo.partRecordList',
+  items: [
+    {
+      partId: 'abc-123',
+      assemblies: ['a','b','c'],
+      name:'this is the part name',
+      description: 'this is the part description'
+    }
+  ],
+  isValid: true
+};
+
+const invalidExample: PartRecordList = {
+  type: 'connect.demo.partRecordList',
+  items: [
+    {
+      partId: 'abc-123',
+      assemblies: ['a','b','c'],
+      name:'this is the part name',
+      description: 'this is the part description'
+    }
+  ],
+  isValid: false
+};
+
 const noExample: PartRecordList = {
     type: 'connect.demo.partRecordList',
     items: []
@@ -131,9 +174,13 @@ const responseDescription: string = `
     ${JSON.stringify(singleExample)}
   No matches:
     ${JSON.stringify(noExample)}
+  Valid match example:
+    ${JSON.stringify(validExample)}
+  Invalid match example:
+    ${JSON.stringify(invalidExample)}
  `;
 
-export const handlePartQuery = async ( apiKey: string, prompt: Prompt ): Promise<PartRecordList> => {
+export const handlePartQueryAgent2 = async ( apiKey: string, prompt: Prompt ): Promise<PartRecordList> => {
   console.log('**** handlePartQuery called', prompt);
   const openai = new OpenAI({ apiKey: apiKey });
 
@@ -143,12 +190,11 @@ export const handlePartQuery = async ( apiKey: string, prompt: Prompt ): Promise
       role: 'system', 
       content: `
       ${mainSystemPrompt}
+      ${validationPrompt}
       ${responseDescription}
       `
     });
     messages.push({ role: 'user', content: `
-      Please find the best matches for the following query against the catalog of parts.  
-      If you can't find any matches, please offer suggestions.
       ${prompt.text}
       ` });
   

@@ -92,6 +92,7 @@ export interface Part extends Context {
   };
   name?: string;
   description?: string;
+  isValid:  boolean;
 }
 
 export interface PartRecord {
@@ -104,6 +105,7 @@ export interface PartRecord {
 export interface PartRecordList extends Context {
     type: "connect.demo.partRecordList";
     items: Array<PartRecord>;
+    isValid:  boolean;
 }
 
 export interface AssemblyRecord {
@@ -124,6 +126,7 @@ export interface WorkflowPrompt extends Context {
       workflowId?: string;
     };
     prompt: Prompt;
+    targets?: {string: string};
     result?: Context;
 }
 
@@ -136,6 +139,7 @@ export interface WorkflowStep extends Context {
   };
   intent: string;
   context:  Context;
+  target?: string;
 }
 
 

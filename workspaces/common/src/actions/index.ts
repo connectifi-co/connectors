@@ -6,7 +6,7 @@ import { companyHQLink } from './link/polygon';
 import { emailLink } from './link/email';
 import { slackLink } from './link/slack';
 import { polygonIOHandler } from './data/polygon';
-import { openAIHandler, openAIFinanceAssistantHandler, openAIContrarianFinanceAssistantHandler, openAIGrowthFinanceAssistantHandler, RAGWorkflowDemoHandler } from './data/openAI';
+import { openAIHandler, openAIFinanceAssistantHandler, openAIContrarianFinanceAssistantHandler, openAIGrowthFinanceAssistantHandler, RAGWorkflowDemoHandler, AltRAGWorkflowDemoHandler } from './data/openAI';
 import { slackAPIHandler } from './data/slack';
 
 const ActionsMap = () => {
@@ -30,6 +30,7 @@ actions.addHandler('teamsLink', teamsLink);
 actions.addHandler('polygonIO', polygonIOHandler);
 actions.addHandler('openAI', openAIHandler);
 actions.addHandler('RagWorkflowDemo', RAGWorkflowDemoHandler);
+actions.addHandler('AltRagWorkflowDemo', AltRAGWorkflowDemoHandler);
 actions.addHandler('openAI-financeAssistant', openAIFinanceAssistantHandler);
 actions.addHandler('openAI-growthAssistant', openAIGrowthFinanceAssistantHandler);
 actions.addHandler('openAI-contrarianAssistant', openAIContrarianFinanceAssistantHandler);
