@@ -29,7 +29,7 @@ export const actionHandler = addMiddleware(async (event: any) => {
   const action = actionsMap.getHandler(event.pathParameters.action);
   if (action) {
     try {
-      const hookResp = await action(event.body);
+      const hookResp = await action({...event.body, ...{headers: event.headers}});
       return createResponse(200, hookResp);
     } catch (e) {
       const errCode = e instanceof RequestError ? 400 : 500;

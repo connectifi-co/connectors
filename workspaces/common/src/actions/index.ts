@@ -8,6 +8,8 @@ import { slackLink } from './link/slack';
 import { polygonIOHandler } from './data/polygon';
 import { openAIHandler, openAIFinanceAssistantHandler, openAIContrarianFinanceAssistantHandler, openAIGrowthFinanceAssistantHandler } from './data/openAI';
 import { slackAPIHandler } from './data/slack';
+import { hubspotHandler } from './data/hubspot';
+import { hubspotContactLink } from './link/hubspot';
 
 const ActionsMap = () => {
   const actions: Map<string, LinkActionHandler | DataActionHandler> = new Map();
@@ -33,5 +35,7 @@ actions.addHandler('openAI-financeAssistant', openAIFinanceAssistantHandler);
 actions.addHandler('openAI-growthAssistant', openAIGrowthFinanceAssistantHandler);
 actions.addHandler('openAI-contrarianAssistant', openAIContrarianFinanceAssistantHandler);
 actions.addHandler('slackAPI', slackAPIHandler);
+actions.addHandler('hubspotAPI', hubspotHandler);
+actions.addHandler('hubspotContactLink', hubspotContactLink);
 
 export const actionsMap = actions;
