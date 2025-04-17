@@ -1,4 +1,4 @@
-import type { Context, Contact } from '@finos/fdc3';
+import type { Context, Contact, ContactList } from '@finos/fdc3';
 
 export class ServerError extends Error {
   constructor(message: string) {
@@ -144,6 +144,22 @@ export interface Channel extends Context {
   name: string;
 }
 
+export interface Interaction extends Context {
+  type: 'fdc3.interaction';
+  participants: ContactList;
+  interactionType: 'Instant Message' | 'Email' | 'Call' | 'Meeting' | 'Note';
+  description: string;
+  initiator?: Contact;
+  origin?: string; 
+  originId?: string;
+}
+
+export interface TransactionResult extends Context {
+  type: "fdc3.transactionResult";
+  status: "Created" | "Deleted" | "Updated" | "Failed";
+  context?: Context;
+  message?: string;
+}
 
 export enum ContextTypes {
   CompanyDetails = 'connect.companyDetails',
