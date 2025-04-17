@@ -1,19 +1,20 @@
 import {
     Interaction,
+    TransactionResult,
+  } from '../../../types';
+import {  
     FilterOperatorEnum,
-    HSFilterGroup,
+    HubSpotFilterGroup,
     HubSpotCreateObject,
     HubSpotObjectAssociations,
-    TransactionResult,
-    HubSpotContact,
-  } from '../../../types';
+    HubSpotContact } from './common';
 import { Client, AssociationTypes } from "@hubspot/api-client";
 import { hubspotContactToFDC3 } from './common';
   
 export const createInteraction = async (apiKey: string, context: Interaction): Promise<TransactionResult> => {
     const hubspotClient = new Client({ accessToken: apiKey });
 
-    const filterGroups: Array<HSFilterGroup>  = [];
+    const filterGroups: Array<HubSpotFilterGroup>  = [];
     
     context.participants.contacts.forEach( (contact) => {
         if (contact.id.email) {
